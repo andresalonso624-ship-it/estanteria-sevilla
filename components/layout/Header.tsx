@@ -37,13 +37,13 @@ export default function Header() {
           <div className="flex items-center gap-8">
             <span>📦 Envíos a toda España</span>
 
-            <span>☎ +34 954 123 456</span>
+            <span>☎ +34 651 13 57 75</span>
 
-            <span>✉ info@estanteriasevilla.com</span>
+            <span>✉ Estanteriasevilla@163.com</span>
           </div>
 
           <span>
-            Lunes - Viernes 09:00 - 18:00
+            Lunes - Viernes 10:00 - 20:00   Sabados 10:00 - 18:00
           </span>
         </div>
       </div>

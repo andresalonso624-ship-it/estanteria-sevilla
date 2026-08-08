@@ -145,11 +145,27 @@ export default function Footer() {
                 </p>
 
                 <p>
-                  Lunes - Viernes
+                  - Lunes - Viernes -
                 </p>
 
                 <p>
-                  09:00 - 18:00
+                  10:00 - 20:00 Horario Continuo
+                </p>
+
+                <p>
+                  - Sabado - 
+                </p>
+
+                <p>
+                  10:00 - 18:00 Horario Continuo
+                </p>
+
+                                <p>
+                  - Domingo Y Festivos - 
+                </p>
+
+                <p>
+                  Cerrado 
                 </p>
 
               </div>
@@ -171,7 +187,7 @@ export default function Footer() {
 
               {/* WHATSAPP */}
               <a
-                href="https://wa.me/34600000000"
+                href="https://wa.me/34651135775"
                 className="flex items-start gap-3 text-sm text-gray-400 transition hover:text-[#C6922F]"
               >
 
@@ -181,7 +197,8 @@ export default function Footer() {
                 />
 
                 <span>
-                  +34 600 000 000
+                  +34 651135775
+                
                 </span>
 
               </a>
@@ -199,7 +216,9 @@ export default function Footer() {
                 />
 
                 <span>
-                  +34 954 123 456
+                  +34 651 13 57 75
+                  <br />
+                  +34 688 09 71 57
                 </span>
 
               </a>
@@ -207,7 +226,7 @@ export default function Footer() {
 
               {/* EMAIL */}
               <a
-                href="mailto:info@estanteriasevilla.com"
+                href="mailto:Estanteriasevilla@163.com"
                 className="flex items-start gap-3 break-all text-sm text-gray-400 transition hover:text-[#C6922F]"
               >
 
@@ -217,7 +236,7 @@ export default function Footer() {
                 />
 
                 <span>
-                  info@estanteriasevilla.com
+                  Estanteriasevilla@163.com
                 </span>
 
               </a>

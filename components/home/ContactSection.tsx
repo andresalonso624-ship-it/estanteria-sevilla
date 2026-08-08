@@ -41,7 +41,7 @@ export default function ContactSection() {
                 </h3>
 
                 <p className="text-gray-500">
-                  +34 600 000 000
+                  +34 651 135775 
                 </p>
               </div>
 
@@ -57,8 +57,9 @@ export default function ContactSection() {
                 </h3>
 
                 <p className="text-gray-500">
-                  +34 954 123 456
+                  +34 688 097157
                 </p>
+      
               </div>
 
             </div>
@@ -73,7 +74,7 @@ export default function ContactSection() {
                 </h3>
 
                 <p className="text-gray-500">
-                  info@estanteriasevilla.com
+                  Estanteriasevilla@163.com
                 </p>
               </div>
 
@@ -132,7 +133,16 @@ export default function ContactSection() {
                 <p className="text-gray-600">
                   Lunes - Viernes
                   <br />
-                  09:00 - 18:00
+                  10:00 - 20:00
+                  <br />
+                  Sabados
+                  <br />
+                  10:00 - 18:00
+                  <br />
+                  Domingos y Festivos
+                  <br />
+                  Cerrados
+
                 </p>
 
               </div>

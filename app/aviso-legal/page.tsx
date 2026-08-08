@@ -8,6 +8,10 @@ export default function AvisoLegal() {
 
       <p className="mt-8 text-gray-600 leading-8">
         Este sitio web pertenece a Estantería Sevilla.
+        <br />
+        Diseñado por Andres Colorado
+        <br />
+        +34 641 17 68 21
       </p>
 
       <h2 className="mt-12 text-2xl font-semibold">
@@ -15,15 +19,15 @@ export default function AvisoLegal() {
       </h2>
 
       <p className="mt-4 leading-8 text-gray-600">
-        Razón social: Estantería Sevilla
+        Razón social: Estantería Sevilla -Tingting Huang-
         <br />
         Dirección: Calle Coginete 23,
         Polígono Aeropuerto,
         Sevilla
         <br />
-        Email: info@estanteriasevilla.com
+        Email:Estanteriasevilla@163.com
         <br />
-        Teléfono: +34 954 123 456
+        Teléfono: +34 688 09 71 57
       </p>
 
     </main>
