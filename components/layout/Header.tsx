@@ -32,14 +32,14 @@ export default function Header() {
 
             <span>📦 Envíos a toda España</span>
 
-            <span>☎ +34 954 123 456</span>
+            <span>☎ +34 688 097 157</span>
 
-            <span>✉ info@estanteriasevilla.com</span>
+            <span>✉ Estanteriasevilla@163.com</span>
 
           </div>
 
           <span>
-            Lunes - Viernes 09:00 - 18:00
+            Lunes - Viernes 10:00 - 20:00
           </span>
 
         </div>
@@ -321,4 +321,4 @@ export default function Header() {
 
     </>
   );
-}
+}x  
