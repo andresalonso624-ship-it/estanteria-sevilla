@@ -24,3 +24,50 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* =====================================================
+   ANIMACIONES DE LA PORTADA
+===================================================== */
+
+@keyframes heroZoom {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes heroCard {
+  0% {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Zoom lento de la imagen */
+
+.animate-hero-zoom {
+  animation: heroZoom 12s ease-in-out infinite alternate;
+}
+
+/* Entrada de la tarjeta */
+
+.animate-hero-card {
+  animation: heroCard 0.9s ease-out both;
+}
+
+/* Respeta la configuración del usuario
+   para reducir movimiento */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-zoom,
+  .animate-hero-card {
+    animation: none;
+  }
+}
