@@ -2,12 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Search,
-  ShoppingCart,
-  Menu,
-  X,
-} from "lucide-react";
+import { Search, ShoppingCart, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 import CartDrawer from "@/components/cart/CartDrawer";
@@ -21,30 +16,32 @@ export default function Header() {
     cartCount,
   } = useCart();
 
-  const [mobileMenuOpen, setMobileMenuOpen] =
-    useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <>
       {/* =====================================================
           BARRA SUPERIOR
-          SOLO ORDENADOR
+          Solo ordenador
       ====================================================== */}
 
       <div className="hidden bg-[#111111] text-white lg:block">
         <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-6 text-sm">
-          
+
           <div className="flex items-center gap-8">
+
             <span>📦 Envíos a toda España</span>
 
-            <span>☎ +34 651 13 57 75</span>
+            <span>☎ +34 954 123 456</span>
 
-            <span>✉ Estanteriasevilla@163.com</span>
+            <span>✉ info@estanteriasevilla.com</span>
+
           </div>
 
           <span>
-            Lunes - Viernes 10:00 - 20:00   Sabados 10:00 - 18:00
+            Lunes - Viernes 09:00 - 18:00
           </span>
+
         </div>
       </div>
 
@@ -53,36 +50,10 @@ export default function Header() {
           HEADER PRINCIPAL
       ====================================================== */}
 
-      <header
-        className="
-          sticky
-          top-0
-          z-[99999]
-          isolate
-          pointer-events-auto
-          border-b
-          border-gray-200
-          bg-white
-          shadow-sm
-        "
-      >
+      <header className="sticky top-0 z-[999] border-b border-gray-200 bg-white shadow-sm">
 
-        <div
-          className="
-            relative
-            z-[99999]
-            mx-auto
-            flex
-            h-[74px]
-            max-w-7xl
-            items-center
-            justify-between
-            px-4
-            sm:px-6
-            lg:h-20
-            lg:px-8
-          "
-        >
+        <div className="mx-auto flex h-[74px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-20 lg:px-8">
+
 
           {/* =================================================
               LOGO
@@ -91,13 +62,7 @@ export default function Header() {
           <Link
             href="/"
             onClick={() => setMobileMenuOpen(false)}
-            className="
-              relative
-              z-[99999]
-              flex
-              shrink-0
-              items-center
-            "
+            className="flex shrink-0 items-center"
           >
 
             <Image
@@ -106,13 +71,7 @@ export default function Header() {
               width={150}
               height={55}
               priority
-              className="
-                h-auto
-                w-[125px]
-                object-contain
-                sm:w-[145px]
-                lg:w-[150px]
-              "
+              className="h-auto w-[125px] object-contain sm:w-[145px] lg:w-[150px]"
             />
 
           </Link>
@@ -126,46 +85,45 @@ export default function Header() {
 
             <ul className="flex items-center gap-10 text-sm font-semibold uppercase">
 
+              {/* INICIO */}
+
               <li>
+
                 <Link
                   href="/"
-                  className="
-                    border-b-2
-                    border-[#C6922F]
-                    pb-1
-                    text-[#C6922F]
-                    transition
-                    hover:text-[#C6922F]
-                  "
+                  className="border-b-2 border-[#C6922F] pb-1 text-[#C6922F]"
                 >
                   Inicio
                 </Link>
+
               </li>
 
+
+              {/* CATÁLOGO */}
+
               <li>
+
                 <Link
                   href="/catalogo"
-                  className="
-                    text-[#111111]
-                    transition
-                    hover:text-[#C6922F]
-                  "
+                  className="transition hover:text-[#C6922F]"
                 >
                   Catálogo
                 </Link>
+
               </li>
 
+
+              {/* PRESUPUESTO */}
+
               <li>
+
                 <Link
-                  href="/contacto"
-                  className="
-                    text-[#111111]
-                    transition
-                    hover:text-[#C6922F]
-                  "
+                  href="/presupuesto"
+                  className="transition hover:text-[#C6922F]"
                 >
-                  Contacto
+                  Presupuesto
                 </Link>
+
               </li>
 
             </ul>
@@ -174,89 +132,39 @@ export default function Header() {
 
 
           {/* =================================================
-              BOTONES
+              ICONOS
           ================================================== */}
 
-          <div
-            className="
-              relative
-              z-[99999]
-              flex
-              items-center
-              gap-1
-              sm:gap-2
-            "
-          >
+          <div className="flex items-center gap-4 sm:gap-5">
 
-            {/* =================================================
-                BUSCADOR
-            ================================================== */}
+
+            {/* BUSCAR */}
 
             <Link
               href="/catalogo"
               aria-label="Buscar productos"
-              className="
-                relative
-                z-[99999]
-                flex
-                h-12
-                w-12
-                cursor-pointer
-                touch-manipulation
-                select-none
-                items-center
-                justify-center
-                rounded-full
-                text-[#111111]
-                transition
-                active:scale-95
-                hover:bg-gray-100
-                hover:text-[#C6922F]
-              "
+              className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F]"
             >
 
               <Search
-                size={25}
+                size={22}
                 strokeWidth={1.8}
               />
 
             </Link>
 
 
-            {/* =================================================
-                CARRITO
-            ================================================== */}
+            {/* CARRITO */}
 
             <button
               type="button"
               aria-label="Abrir carrito"
-              onClick={() => {
-                console.log("CLICK CARRITO");
-                openCart();
-              }}
-              className="
-                relative
-                z-[99999]
-                flex
-                h-12
-                w-12
-                cursor-pointer
-                touch-manipulation
-                select-none
-                items-center
-                justify-center
-                rounded-full
-                bg-transparent
-                text-[#111111]
-                transition
-                active:scale-95
-                hover:bg-gray-100
-                hover:text-[#C6922F]
-              "
+              onClick={openCart}
+              className="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F]"
             >
 
               <ShoppingCart
-                size={25}
+                size={22}
                 strokeWidth={1.8}
               />
 
@@ -264,7 +172,6 @@ export default function Header() {
 
               <span
                 className="
-                  pointer-events-none
                   absolute
                   -right-1
                   -top-1
@@ -299,43 +206,20 @@ export default function Header() {
                   : "Abrir menú"
               }
               aria-expanded={mobileMenuOpen}
-              onClick={() => {
-                console.log("CLICK MENU");
-
-                setMobileMenuOpen(
-                  (prev) => !prev
-                );
-              }}
-              className="
-                relative
-                z-[99999]
-                flex
-                h-12
-                w-12
-                cursor-pointer
-                touch-manipulation
-                select-none
-                items-center
-                justify-center
-                rounded-full
-                bg-transparent
-                text-[#111111]
-                transition
-                active:scale-95
-                hover:bg-gray-100
-                hover:text-[#C6922F]
-                lg:hidden
-              "
+              onClick={() =>
+                setMobileMenuOpen(!mobileMenuOpen)
+              }
+              className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F] lg:hidden"
             >
 
               {mobileMenuOpen ? (
                 <X
-                  size={28}
+                  size={25}
                   strokeWidth={1.8}
                 />
               ) : (
                 <Menu
-                  size={28}
+                  size={25}
                   strokeWidth={1.8}
                 />
               )}
@@ -353,21 +237,12 @@ export default function Header() {
 
         {mobileMenuOpen && (
 
-          <div
-            className="
-              relative
-              z-[99998]
-              border-t
-              border-gray-100
-              bg-white
-              shadow-lg
-              lg:hidden
-            "
-          >
+          <div className="border-t border-gray-100 bg-white shadow-lg lg:hidden">
 
-            <nav className="px-5 py-4">
+            <nav className="px-5 py-5">
 
               <div className="flex flex-col">
+
 
                 {/* INICIO */}
 
@@ -376,15 +251,7 @@ export default function Header() {
                   onClick={() =>
                     setMobileMenuOpen(false)
                   }
-                  className="
-                    border-b
-                    border-gray-100
-                    py-4
-                    text-sm
-                    font-semibold
-                    uppercase
-                    text-[#C6922F]
-                  "
+                  className="border-b border-gray-100 py-4 text-sm font-semibold uppercase text-[#C6922F]"
                 >
                   Inicio
                 </Link>
@@ -397,42 +264,22 @@ export default function Header() {
                   onClick={() =>
                     setMobileMenuOpen(false)
                   }
-                  className="
-                    border-b
-                    border-gray-100
-                    py-4
-                    text-sm
-                    font-semibold
-                    uppercase
-                    text-[#111111]
-                    transition
-                    hover:text-[#C6922F]
-                  "
+                  className="border-b border-gray-100 py-4 text-sm font-semibold uppercase text-[#111111] transition hover:text-[#C6922F]"
                 >
                   Catálogo
                 </Link>
 
 
-                {/* CONTACTO */}
+                {/* PRESUPUESTO */}
 
                 <Link
-                  href="/contacto"
+                  href="/presupuesto"
                   onClick={() =>
                     setMobileMenuOpen(false)
                   }
-                  className="
-                    border-b
-                    border-gray-100
-                    py-4
-                    text-sm
-                    font-semibold
-                    uppercase
-                    text-[#111111]
-                    transition
-                    hover:text-[#C6922F]
-                  "
+                  className="border-b border-gray-100 py-4 text-sm font-semibold uppercase text-[#111111] transition hover:text-[#C6922F]"
                 >
-                  Contacto
+                  Presupuesto
                 </Link>
 
 
@@ -443,21 +290,10 @@ export default function Header() {
                   onClick={() =>
                     setMobileMenuOpen(false)
                   }
-                  className="
-                    flex
-                    items-center
-                    gap-3
-                    py-4
-                    text-sm
-                    font-semibold
-                    uppercase
-                    text-[#111111]
-                    transition
-                    hover:text-[#C6922F]
-                  "
+                  className="flex items-center gap-3 py-4 text-sm font-semibold uppercase text-[#111111]"
                 >
 
-                  <Search size={20} />
+                  <Search size={18} />
 
                   Buscar productos
 
