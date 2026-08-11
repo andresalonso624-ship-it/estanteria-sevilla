@@ -206,14 +206,40 @@ export default function ProductCard({
 
   return (
     <>
-      {/* TARJETA */}
+      {/* =====================================================
+          TARJETA DEL PRODUCTO
+      ====================================================== */}
 
-      <article className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <article
+        className="
+          group
+          overflow-hidden
+          rounded-[24px]
+          border
+          border-[#E8E1D8]
+          bg-white
+          shadow-[0_8px_30px_rgba(44,36,28,0.06)]
+          transition-all
+          duration-500
+          hover:-translate-y-1
+          hover:border-[#D8C7AD]
+          hover:shadow-[0_18px_45px_rgba(44,36,28,0.12)]
+        "
+      >
 
-        {/* IMAGEN */}
+        {/* =====================================================
+            IMAGEN
+        ====================================================== */}
 
         <div
-          className="relative cursor-pointer bg-[#fafafa]"
+          className="
+            relative
+            cursor-pointer
+            overflow-hidden
+            bg-gradient-to-b
+            from-[#FBF9F5]
+            to-[#F4EFE7]
+          "
           onClick={() =>
             setModalOpen(true)
           }
@@ -224,122 +250,339 @@ export default function ProductCard({
             setHoverImage(false)
           }
         >
-          <div className="relative h-[190px] sm:h-[250px] md:h-[300px] lg:h-[340px]">
+
+          {/* Marco interior */}
+
+          <div
+            className="
+              relative
+              h-[200px]
+              p-3
+              sm:h-[260px]
+              sm:p-4
+              md:h-[310px]
+              md:p-5
+              lg:h-[340px]
+            "
+          >
 
             {image ? (
-              <Image
-                src={image}
-                alt={nombre}
-                fill
-                sizes="
-                  (max-width: 640px) 50vw,
-                  (max-width: 1024px) 33vw,
-                  25vw
+              <div
+                className="
+                  relative
+                  h-full
+                  w-full
+                  overflow-hidden
+                  rounded-[18px]
+                  bg-white
+                  shadow-[0_4px_18px_rgba(44,36,28,0.05)]
                 "
-                className="object-contain p-3 transition duration-500 group-hover:scale-105 sm:p-5 md:p-6 lg:p-8"
-              />
+              >
+
+                <Image
+                  src={image}
+                  alt={nombre}
+                  fill
+                  sizes="
+                    (max-width: 640px) 50vw,
+                    (max-width: 1024px) 33vw,
+                    25vw
+                  "
+                  className="
+                    object-contain
+                    p-4
+                    transition-transform
+                    duration-700
+                    ease-out
+                    group-hover:scale-[1.035]
+                    sm:p-5
+                    md:p-6
+                  "
+                />
+
+              </div>
             ) : (
-              <div className="flex h-full items-center justify-center text-sm text-gray-400">
+
+              <div
+                className="
+                  flex
+                  h-full
+                  items-center
+                  justify-center
+                  rounded-[18px]
+                  bg-white
+                  text-sm
+                  text-gray-400
+                "
+              >
                 Sin imagen
               </div>
+
             )}
 
           </div>
 
-          {/* NÚMERO DE FOTOS */}
+          {/* =================================================
+              NÚMERO DE FOTOS
+          ================================================== */}
 
           {gallery.length > 1 && (
-            <div className="absolute right-2 top-2 rounded-full bg-black px-2 py-1 text-[10px] font-semibold text-white sm:right-3 sm:top-3 sm:px-3 sm:text-xs">
+            <div
+              className="
+                absolute
+                left-5
+                top-5
+                rounded-full
+                border
+                border-white/60
+                bg-white/90
+                px-3
+                py-1.5
+                text-[10px]
+                font-semibold
+                text-[#4A4035]
+                shadow-sm
+                backdrop-blur-sm
+                sm:left-6
+                sm:top-6
+                sm:text-xs
+              "
+            >
               +{gallery.length - 1} fotos
             </div>
           )}
 
-          {/* BOTÓN AMPLIAR */}
+          {/* =================================================
+              BOTÓN AMPLIAR
+          ================================================== */}
 
           <button
             type="button"
+            aria-label="Ampliar imagen"
             onClick={(e) => {
               e.stopPropagation();
               setModalOpen(true);
             }}
-            className="absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md transition hover:scale-110 sm:bottom-3 sm:right-3 sm:h-10 sm:w-10"
+            className="
+              absolute
+              bottom-5
+              right-5
+              flex
+              h-9
+              w-9
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-[#E8E1D8]
+              bg-white/95
+              text-[#3E352B]
+              shadow-md
+              backdrop-blur-sm
+              transition-all
+              duration-300
+              hover:scale-110
+              hover:bg-[#C6922F]
+              hover:text-white
+              sm:bottom-6
+              sm:right-6
+              sm:h-10
+              sm:w-10
+            "
           >
             <Expand
-              size={15}
-              className="sm:h-[18px] sm:w-[18px]"
+              size={16}
             />
           </button>
+
         </div>
 
-        {/* INFORMACIÓN */}
+        {/* =====================================================
+            INFORMACIÓN
+        ====================================================== */}
 
-        <div className="space-y-3 p-3 sm:space-y-4 sm:p-4 md:space-y-5 md:p-5 lg:p-6">
+        <div
+          className="
+            space-y-4
+            p-4
+            sm:space-y-5
+            sm:p-5
+            md:p-6
+          "
+        >
 
-          {/* NOMBRE */}
+          {/* =================================================
+              NOMBRE
+          ================================================== */}
 
           <div>
-            <h2 className="line-clamp-2 text-sm font-bold leading-5 text-[#111111] sm:text-base md:text-lg lg:text-xl">
+
+            <h2
+              className="
+                line-clamp-2
+                text-[15px]
+                font-semibold
+                leading-5
+                tracking-[-0.01em]
+                text-[#211D19]
+                sm:text-base
+                md:text-lg
+              "
+            >
               {nombre}
             </h2>
 
             {currentSku && (
-              <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-gray-500 sm:mt-2 sm:text-xs md:text-sm">
+              <div
+                className="
+                  mt-2
+                  flex
+                  items-center
+                  gap-1.5
+                  text-[10px]
+                  text-[#8B8177]
+                  sm:text-xs
+                "
+              >
+
                 <Package
                   size={13}
-                  className="sm:h-[15px] sm:w-[15px]"
+                  className="text-[#A49686]"
                 />
 
-                {currentSku}
+                <span>
+                  {currentSku}
+                </span>
+
               </div>
             )}
+
           </div>
 
-          {/* PRECIO */}
+          {/* =================================================
+              PRECIO
+          ================================================== */}
 
-          <div>
-            <span className="text-[10px] text-gray-500 sm:text-xs md:text-sm">
+          <div
+            className="
+              rounded-xl
+              bg-[#FAF7F2]
+              px-3
+              py-3
+              sm:px-4
+              sm:py-3.5
+            "
+          >
+
+            <span
+              className="
+                block
+                text-[10px]
+                font-medium
+                uppercase
+                tracking-wider
+                text-[#95897B]
+                sm:text-xs
+              "
+            >
               Desde
             </span>
 
-            <h3 className="text-xl font-bold text-[#111111] sm:text-2xl md:text-3xl">
+            <h3
+              className="
+                mt-0.5
+                text-2xl
+                font-bold
+                tracking-tight
+                text-[#211D19]
+                sm:text-[26px]
+              "
+            >
               {currentPrice.toFixed(2)} €
             </h3>
+
           </div>
 
-          {/* COLOR */}
+          {/* =================================================
+              COLOR
+          ================================================== */}
 
           {colors.length > 0 && (
             <div>
-              <p className="mb-2 text-xs font-semibold sm:text-sm">
+
+              <p
+                className="
+                  mb-2
+                  text-xs
+                  font-semibold
+                  text-[#29241F]
+                  sm:text-sm
+                "
+              >
                 Color
               </p>
 
-              <div className="flex flex-wrap gap-1.5 sm:gap-2">
+              <div
+                className="
+                  flex
+                  flex-wrap
+                  gap-1.5
+                  sm:gap-2
+                "
+              >
+
                 {colors.map((color) => (
+
                   <button
                     key={color}
                     type="button"
                     onClick={() =>
                       setSelectedColor(color)
                     }
-                    className={`rounded-full border px-2.5 py-1.5 text-[10px] transition sm:px-3 sm:py-2 sm:text-xs md:px-4 md:text-sm ${
-                      selectedColor === color
-                        ? "border-black bg-black text-white"
-                        : "border-gray-300 hover:border-black"
-                    }`}
+                    className={`
+                      rounded-full
+                      border
+                      px-3
+                      py-1.5
+                      text-[10px]
+                      transition-all
+                      duration-200
+                      sm:px-3.5
+                      sm:py-2
+                      sm:text-xs
+                      ${
+                        selectedColor === color
+                          ? "border-[#C6922F] bg-[#C6922F] text-white shadow-sm"
+                          : "border-[#DDD5CA] bg-white text-[#4A4035] hover:border-[#C6922F]"
+                      }
+                    `}
                   >
                     {color}
                   </button>
+
                 ))}
+
               </div>
+
             </div>
           )}
 
-          {/* MEDIDA */}
+          {/* =================================================
+              MEDIDA
+          ================================================== */}
 
           {sizes.length > 0 && (
             <div>
-              <p className="mb-2 text-xs font-semibold sm:text-sm">
+
+              <p
+                className="
+                  mb-2
+                  text-xs
+                  font-semibold
+                  text-[#29241F]
+                  sm:text-sm
+                "
+              >
                 Medida
               </p>
 
@@ -350,80 +593,191 @@ export default function ProductCard({
                     e.target.value
                   )
                 }
-                className="w-full rounded-lg border border-gray-300 bg-white px-2.5 py-2 text-xs outline-none focus:border-black sm:rounded-xl sm:px-4 sm:py-3 sm:text-sm"
+                className="
+                  h-11
+                  w-full
+                  cursor-pointer
+                  rounded-xl
+                  border
+                  border-[#DCD4C9]
+                  bg-white
+                  px-3
+                  text-xs
+                  text-[#302A25]
+                  outline-none
+                  transition
+                  focus:border-[#C6922F]
+                  focus:ring-2
+                  focus:ring-[#C6922F]/10
+                  sm:h-12
+                  sm:px-4
+                  sm:text-sm
+                "
               >
+
                 {sizes.map((size) => (
+
                   <option
                     key={size}
                     value={size}
                   >
                     {size}
                   </option>
+
                 ))}
+
               </select>
+
             </div>
           )}
 
+          {/* =================================================
+              CANTIDAD
+          ================================================== */}
 
+          <div>
 
-{/* CANTIDAD */}
+            <p
+              className="
+                mb-2
+                text-xs
+                font-semibold
+                text-[#29241F]
+                sm:text-sm
+              "
+            >
+              Cantidad
+            </p>
 
-<div>
-  <p className="mb-2 text-sm font-semibold">
-    Cantidad
-  </p>
+            <div
+              className="
+                flex
+                h-11
+                w-[140px]
+                items-center
+                justify-between
+                overflow-hidden
+                rounded-xl
+                border
+                border-[#DCD4C9]
+                bg-white
+                sm:h-12
+              "
+            >
 
-  <div className="flex h-12 w-36 items-center justify-between overflow-hidden rounded-xl border border-gray-300 bg-white">
+              <button
+                type="button"
+                aria-label="Disminuir cantidad"
+                onClick={(e) => {
+                  e.stopPropagation();
 
-    <button
-      type="button"
-      aria-label="Disminuir cantidad"
-      onClick={(e) => {
-        e.stopPropagation();
+                  setQuantity((prev) =>
+                    prev > 1
+                      ? prev - 1
+                      : 1
+                  );
+                }}
+                className="
+                  flex
+                  h-full
+                  w-11
+                  touch-manipulation
+                  items-center
+                  justify-center
+                  text-lg
+                  font-medium
+                  text-[#5A5148]
+                  transition
+                  hover:bg-[#F7F3ED]
+                  active:bg-[#EEE7DC]
+                "
+              >
+                −
+              </button>
 
-        setQuantity((prev) =>
-          prev > 1 ? prev - 1 : 1
-        );
-      }}
-      className="flex h-full w-12 touch-manipulation items-center justify-center text-xl font-medium text-gray-700 transition active:bg-gray-100"
-    >
-      −
-    </button>
+              <span
+                className="
+                  min-w-[40px]
+                  text-center
+                  text-sm
+                  font-semibold
+                  text-[#29241F]
+                "
+              >
+                {quantity}
+              </span>
 
-    <span className="min-w-[40px] text-center text-sm font-semibold">
-      {quantity}
-    </span>
+              <button
+                type="button"
+                aria-label="Aumentar cantidad"
+                onClick={(e) => {
+                  e.stopPropagation();
 
-    <button
-      type="button"
-      aria-label="Aumentar cantidad"
-      onClick={(e) => {
-        e.stopPropagation();
+                  setQuantity(
+                    (prev) => prev + 1
+                  );
+                }}
+                className="
+                  flex
+                  h-full
+                  w-11
+                  touch-manipulation
+                  items-center
+                  justify-center
+                  text-lg
+                  font-medium
+                  text-[#5A5148]
+                  transition
+                  hover:bg-[#F7F3ED]
+                  active:bg-[#EEE7DC]
+                "
+              >
+                +
+              </button>
 
-        setQuantity((prev) => prev + 1);
-      }}
-      className="flex h-full w-12 touch-manipulation items-center justify-center text-xl font-medium text-gray-700 transition active:bg-gray-100"
-    >
-      +
-    </button>
+            </div>
 
-  </div>
-</div>
+          </div>
 
-          {/* ESTADO */}
+          {/* =================================================
+              ESTADO
+          ================================================== */}
 
-          <div className="flex items-center justify-between">
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              border-t
+              border-[#EEE8E0]
+              pt-4
+            "
+          >
 
-            <span className="text-xs text-gray-500 sm:text-sm">
+            <span
+              className="
+                text-xs
+                text-[#8B8177]
+                sm:text-sm
+              "
+            >
               Estado
             </span>
 
             <span
-              className={`rounded-full px-2 py-1 text-[9px] font-semibold sm:px-3 sm:text-xs ${
-                inStock
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
-              }`}
+              className={`
+                rounded-full
+                px-3
+                py-1
+                text-[9px]
+                font-semibold
+                sm:text-xs
+                ${
+                  inStock
+                    ? "bg-[#E4F8EC] text-[#16834A]"
+                    : "bg-[#FCE7E7] text-[#C53535]"
+                }
+              `}
             >
               {inStock
                 ? "Disponible"
@@ -432,18 +786,47 @@ export default function ProductCard({
 
           </div>
 
-          {/* BOTÓN */}
+          {/* =================================================
+              BOTÓN CARRITO
+          ================================================== */}
 
           <button
             type="button"
             disabled={!inStock}
             onClick={handleAddToCart}
-            className={`flex w-full items-center justify-center gap-2 rounded-lg py-3 text-xs font-semibold transition sm:gap-3 sm:rounded-xl sm:py-4 sm:text-sm ${
-              inStock
-                ? "bg-black text-white hover:bg-[#C6922F]"
-                : "cursor-not-allowed bg-gray-300 text-gray-500"
-            }`}
+            className={`
+              flex
+              w-full
+              items-center
+              justify-center
+              gap-2
+              rounded-xl
+              py-3
+              text-xs
+              font-semibold
+              transition-all
+              duration-300
+              sm:py-3.5
+              sm:text-sm
+              ${
+                inStock
+                  ? `
+                    bg-[#211D19]
+                    text-white
+                    shadow-sm
+                    hover:-translate-y-0.5
+                    hover:bg-[#C6922F]
+                    hover:shadow-md
+                  `
+                  : `
+                    cursor-not-allowed
+                    bg-gray-200
+                    text-gray-500
+                  `
+              }
+            `}
           >
+
             <ShoppingCart
               size={17}
             />
@@ -451,22 +834,48 @@ export default function ProductCard({
             {inStock
               ? "Añadir al carrito"
               : "Sin stock"}
+
           </button>
 
-          {/* DESCRIPCIÓN */}
+          {/* =================================================
+              DESCRIPCIÓN
+          ================================================== */}
 
           {descripcion && (
-            <div className="border-t border-gray-200 pt-3 sm:pt-5">
-              <p className="line-clamp-3 text-[10px] leading-4 text-gray-500 sm:text-xs sm:leading-5 md:text-sm md:leading-6">
+            <div
+              className="
+                border-t
+                border-[#EEE8E0]
+                pt-4
+                sm:pt-5
+              "
+            >
+
+              <p
+                className="
+                  line-clamp-3
+                  text-[10px]
+                  leading-4
+                  text-[#81776D]
+                  sm:text-xs
+                  sm:leading-5
+                  md:text-sm
+                  md:leading-6
+                "
+              >
                 {descripcion}
               </p>
+
             </div>
           )}
 
         </div>
+
       </article>
 
-      {/* MODAL */}
+      {/* =====================================================
+          MODAL DE IMÁGENES
+      ====================================================== */}
 
       <ProductModal
         open={modalOpen}
@@ -475,6 +884,7 @@ export default function ProductCard({
           setModalOpen(false)
         }
       />
+
     </>
   );
 }

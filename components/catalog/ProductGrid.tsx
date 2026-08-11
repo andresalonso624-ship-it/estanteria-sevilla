@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   Search,
   SlidersHorizontal,
+  X,
 } from "lucide-react";
 
 import ProductCard from "./ProductCard";
@@ -50,57 +51,54 @@ interface ProductGridProps {
 export default function ProductGrid({
   products,
 }: ProductGridProps) {
-  const [search, setSearch] =
-    useState("");
+  const [search, setSearch] = useState("");
 
   /*
    * BUSCADOR
    */
 
   const filteredProducts = useMemo(() => {
-    const text =
-      search.toLowerCase().trim();
+    const text = search.toLowerCase().trim();
 
     if (!text) {
       return products;
     }
 
-    return products.filter(
-      (product) => {
-        const title =
-          product.title?.toLowerCase() ??
-          "";
+    return products.filter((product) => {
+      const title =
+        product.title?.toLowerCase() ?? "";
 
-        const description =
-          product.description?.toLowerCase() ??
-          "";
+      const description =
+        product.description?.toLowerCase() ?? "";
 
-        const skus =
-          product.variants?.nodes
-            ?.map(
-              (variant) =>
-                variant.sku?.toLowerCase() ??
-                ""
-            )
-            .join(" ") ?? "";
+      const skus =
+        product.variants?.nodes
+          ?.map(
+            (variant) =>
+              variant.sku?.toLowerCase() ?? ""
+          )
+          .join(" ") ?? "";
 
-        return (
-          title.includes(text) ||
-          description.includes(text) ||
-          skus.includes(text)
-        );
-      }
-    );
+      return (
+        title.includes(text) ||
+        description.includes(text) ||
+        skus.includes(text)
+      );
+    });
   }, [products, search]);
 
   return (
     <div className="w-full">
 
-      {/* BUSCADOR */}
+      {/* =========================
+          BUSCADOR
+      ========================== */}
 
       <div className="mx-auto mb-8 w-full max-w-5xl px-3 sm:mb-10 sm:px-6">
 
         <div className="flex h-12 w-full items-center rounded-full border border-gray-200 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.07)] transition focus-within:border-[#C6922F] focus-within:ring-2 focus-within:ring-[#C6922F]/10 sm:h-14">
+
+          {/* ICONO BUSCAR */}
 
           <div className="flex shrink-0 items-center pl-4 text-gray-500 sm:pl-5">
             <Search
@@ -108,6 +106,8 @@ export default function ProductGrid({
               className="sm:h-[22px] sm:w-[22px]"
             />
           </div>
+
+          {/* INPUT */}
 
           <input
             type="text"
@@ -119,6 +119,21 @@ export default function ProductGrid({
             className="h-full min-w-0 flex-1 bg-transparent px-3 text-xs text-gray-900 outline-none placeholder:text-gray-400 sm:px-4 sm:text-base"
           />
 
+          {/* X PARA BORRAR */}
+
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch("")}
+              aria-label="Borrar búsqueda"
+              className="mr-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-gray-400 transition hover:bg-gray-100 hover:text-gray-700 sm:mr-2"
+            >
+              <X size={18} />
+            </button>
+          )}
+
+          {/* ICONO FILTROS */}
+
           <div className="mr-1.5 flex h-8 w-8 shrink-0 items-center justify-center border-l border-gray-200 text-gray-600 sm:mr-2 sm:h-10 sm:w-10">
             <SlidersHorizontal
               size={18}
@@ -129,7 +144,9 @@ export default function ProductGrid({
 
       </div>
 
-      {/* RESULTADOS */}
+      {/* =========================
+          RESULTADOS
+      ========================== */}
 
       {search.trim() && (
         <div className="mx-auto mb-5 w-full max-w-7xl px-3 sm:px-6">
@@ -139,13 +156,11 @@ export default function ProductGrid({
             {filteredProducts.length === 0
               ? "No encontramos productos."
               : `${filteredProducts.length} producto${
-                  filteredProducts.length !==
-                  1
+                  filteredProducts.length !== 1
                     ? "s"
                     : ""
                 } encontrado${
-                  filteredProducts.length !==
-                  1
+                  filteredProducts.length !== 1
                     ? "s"
                     : ""
                 }`}
@@ -155,7 +170,9 @@ export default function ProductGrid({
         </div>
       )}
 
-      {/* PRODUCTOS */}
+      {/* =========================
+          PRODUCTOS
+      ========================== */}
 
       {filteredProducts.length > 0 ? (
 
@@ -163,40 +180,54 @@ export default function ProductGrid({
 
           {filteredProducts.map(
             (product) => (
+
               <ProductCard
                 key={product.id}
+
                 id={product.id}
+
                 nombre={product.title}
+
                 descripcion={
                   product.description
                 }
+
                 sku={
                   product.variants?.nodes?.[0]
                     ?.sku ?? ""
                 }
+
                 precio={Number(
                   product.variants?.nodes?.[0]
                     ?.price?.amount ?? 0
                 )}
+
                 imagenPrincipal={
                   product.featuredImage?.url ??
                   ""
                 }
+
                 imagenes={
                   product.images?.nodes?.map(
                     (img) => img.url
                   ) ?? []
                 }
+
                 variantes={
                   product.variants?.nodes ?? []
                 }
               />
+
             )
           )}
 
         </div>
 
       ) : (
+
+        /* =========================
+            SIN RESULTADOS
+        ========================== */
 
         <div className="mx-auto max-w-7xl px-4 py-16 text-center">
 
