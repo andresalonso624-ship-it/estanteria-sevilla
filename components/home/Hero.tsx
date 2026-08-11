@@ -32,6 +32,7 @@ export default function Hero() {
       ====================================================== */}
       <div className="block md:hidden">
 
+        {/* Imagen */}
         <div className="relative h-[420px] w-full overflow-hidden">
 
           <Image
@@ -47,22 +48,26 @@ export default function Hero() {
             }}
           />
 
+          {/* Degradado */}
           <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#F7F4EE] via-[#F7F4EE]/40 to-transparent" />
 
         </div>
 
+        {/* Tarjeta */}
         <div
-          className="relative z-10 mx-4 -mt-16 rounded-[30px] bg-white px-6 pb-7 pt-8 shadow-xl"
+          className="relative z-10 mx-4 -mt-16 rounded-[30px] bg-white px-6 pb-8 pt-8 text-center shadow-xl"
           style={{
             transform: `translateY(${contentMove}px)`,
             opacity: contentOpacity,
           }}
         >
 
+          {/* Etiqueta */}
           <p className="mb-3 text-[10px] font-semibold tracking-[0.25em] text-[#C6922F]">
             ESTANTERÍA SEVILLA
           </p>
 
+          {/* Título */}
           <h1 className="font-serif text-[32px] font-bold leading-[1.05] text-[#111111]">
             Equipamiento
             <br />
@@ -73,13 +78,15 @@ export default function Hero() {
             </span>
           </h1>
 
-          <p className="mt-5 text-sm leading-6 text-[#334155]">
+          {/* Descripción */}
+          <p className="mx-auto mt-5 max-w-[330px] text-sm leading-6 text-[#334155]">
             Descubre soluciones profesionales para comercios,
             supermercados, tiendas de ropa, ferreterías,
             almacenes y cualquier tipo de negocio.
           </p>
 
-          <div className="mt-6 flex flex-col gap-3">
+          {/* Botones */}
+          <div className="mx-auto mt-7 flex max-w-[330px] flex-col gap-3">
 
             <Link
               href="/catalogo"
