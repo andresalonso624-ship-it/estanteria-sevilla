@@ -33,37 +33,30 @@ export default function CartDrawer({
   /*
    * CARGAR CARRITO
    */
-  async function loadCart(
-    showLoading = true
-  ) {
+  async function loadCart(showLoading = true) {
     if (showLoading) {
       setLoading(true);
     }
 
     try {
-      const cartId =
-        localStorage.getItem(
-          "shopify-cart-id"
-        );
+      const cartId = localStorage.getItem(
+        "shopify-cart-id"
+      );
 
       if (!cartId) {
         setCart(null);
         return;
       }
 
-      const response = await fetch(
-        "/api/cart/get",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-          body: JSON.stringify({
-            cartId,
-          }),
-        }
-      );
+      const response = await fetch("/api/cart/get", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cartId,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error(
@@ -104,10 +97,6 @@ export default function CartDrawer({
 
     loadCart(true);
 
-    /*
-     * Cuando otro componente añade un producto,
-     * actualizamos el carrito.
-     */
     function refresh() {
       loadCart(false);
     }
@@ -128,13 +117,10 @@ export default function CartDrawer({
   /*
    * ELIMINAR PRODUCTO
    */
-  async function removeLine(
-    lineId: string
-  ) {
-    const cartId =
-      localStorage.getItem(
-        "shopify-cart-id"
-      );
+  async function removeLine(lineId: string) {
+    const cartId = localStorage.getItem(
+      "shopify-cart-id"
+    );
 
     if (!cartId) return;
 
@@ -162,13 +148,6 @@ export default function CartDrawer({
 
       const data = await response.json();
 
-      /*
-       * IMPORTANTE:
-       * No hacemos cartUpdated aquí.
-       *
-       * Ya tenemos la respuesta actualizada
-       * de Shopify.
-       */
       setCart(data);
     } catch (error) {
       console.error(
@@ -190,10 +169,9 @@ export default function CartDrawer({
       return;
     }
 
-    const cartId =
-      localStorage.getItem(
-        "shopify-cart-id"
-      );
+    const cartId = localStorage.getItem(
+      "shopify-cart-id"
+    );
 
     if (!cartId) return;
 
@@ -222,10 +200,6 @@ export default function CartDrawer({
 
       const data = await response.json();
 
-      /*
-       * Shopify ya nos devuelve
-       * el carrito actualizado.
-       */
       setCart(data);
     } catch (error) {
       console.error(
@@ -249,63 +223,84 @@ export default function CartDrawer({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/50">
+    <div
+      className="fixed inset-0 z-[9999] bg-black/50"
+      style={{
+        opacity: 1,
+      }}
+    >
+      {/* PANEL DEL CARRITO */}
 
-      {/* PANEL */}
-
-      <div className="absolute right-0 top-0 flex h-full w-full max-w-[430px] flex-col bg-white shadow-2xl">
-
+      <div
+        className="absolute right-0 top-0 flex h-full w-full max-w-[430px] flex-col bg-white text-[#111111] shadow-2xl"
+        style={{
+          opacity: 1,
+          isolation: "isolate",
+        }}
+      >
         {/* HEADER */}
 
-        <div className="flex items-center justify-between border-b p-6">
+        <div
+          className="relative z-20 shrink-0 border-b border-gray-200 bg-white px-5 py-5 sm:p-6"
+          style={{
+            opacity: 1,
+          }}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-[28px] font-bold leading-tight text-[#111111] opacity-100">
+                Carrito
+              </h2>
 
-          <div>
+              <p className="mt-1 text-[16px] font-medium text-gray-600 opacity-100">
+                {cart?.totalQuantity ?? 0}{" "}
+                {cart?.totalQuantity === 1
+                  ? "producto"
+                  : "productos"}
+              </p>
+            </div>
 
-            <h2 className="text-2xl font-bold">
-              Carrito
-            </h2>
-
-            <p className="text-sm text-gray-500">
-              {cart?.totalQuantity ?? 0} productos
-            </p>
-
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Cerrar carrito"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-gray-700 transition hover:bg-gray-100 active:bg-gray-200"
+            >
+              <X
+                size={25}
+                strokeWidth={2}
+              />
+            </button>
           </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-full p-2 transition hover:bg-gray-100"
-            aria-label="Cerrar carrito"
-          >
-            <X size={22} />
-          </button>
-
         </div>
 
         {/* CONTENIDO */}
 
-        <div className="flex-1 overflow-y-auto">
-
+        <div
+          className="relative z-10 min-h-0 flex-1 overflow-y-auto bg-white text-[#111111]"
+          style={{
+            opacity: 1,
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
           {loading ? (
-
-            <div className="flex h-full items-center justify-center">
-
-              <p className="text-gray-500">
+            <div className="flex h-full min-h-[300px] items-center justify-center bg-white">
+              <p className="text-[16px] font-medium text-gray-600">
                 Cargando carrito...
               </p>
-
             </div>
-
           ) : lines.length === 0 ? (
-
-            <CartEmpty />
-
+            <div className="bg-white">
+              <CartEmpty />
+            </div>
           ) : (
-
-            <div className="space-y-5 p-6">
-
+            <div
+              className="space-y-5 bg-white p-5 sm:p-6"
+              style={{
+                opacity: 1,
+              }}
+            >
               {lines.map((line) => (
-
                 <CartItem
                   key={line.id}
                   line={line}
@@ -325,27 +320,28 @@ export default function CartDrawer({
                     )
                   }
                 />
-
               ))}
-
             </div>
-
           )}
-
         </div>
 
         {/* FOOTER */}
 
-        <CartFooter
-          lines={lines}
-          checkoutUrl={
-            cart?.checkoutUrl ?? "#"
-          }
-          onClose={onClose}
-        />
-
+        <div
+          className="relative z-30 shrink-0 bg-white"
+          style={{
+            opacity: 1,
+          }}
+        >
+          <CartFooter
+            lines={lines}
+            checkoutUrl={
+              cart?.checkoutUrl ?? "#"
+            }
+            onClose={onClose}
+          />
+        </div>
       </div>
-
     </div>
   );
 }
