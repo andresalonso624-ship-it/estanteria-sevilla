@@ -22,20 +22,16 @@ export default function Header() {
     <>
       {/* =====================================================
           BARRA SUPERIOR
-          Solo ordenador
+          SOLO ORDENADOR
       ====================================================== */}
 
       <div className="hidden bg-[#111111] text-white lg:block">
         <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-6 text-sm">
 
           <div className="flex items-center gap-8">
-
             <span>📦 Envíos a toda España</span>
-
             <span>☎ +34 688 097 157</span>
-
             <span>✉ Estanteriasevilla@163.com</span>
-
           </div>
 
           <span>
@@ -52,8 +48,21 @@ export default function Header() {
 
       <header className="sticky top-0 z-[999] border-b border-gray-200 bg-white shadow-sm">
 
-        <div className="mx-auto flex h-[74px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-20 lg:px-8">
-
+        <div
+          className="
+            mx-auto
+            flex
+            h-[68px]
+            max-w-7xl
+            items-center
+            justify-between
+            px-4
+            sm:h-[74px]
+            sm:px-6
+            lg:h-20
+            lg:px-8
+          "
+        >
 
           {/* =================================================
               LOGO
@@ -71,7 +80,13 @@ export default function Header() {
               width={150}
               height={55}
               priority
-              className="h-auto w-[125px] object-contain sm:w-[145px] lg:w-[150px]"
+              className="
+                h-auto
+                w-[112px]
+                object-contain
+                sm:w-[135px]
+                lg:w-[150px]
+              "
             />
 
           </Link>
@@ -85,45 +100,31 @@ export default function Header() {
 
             <ul className="flex items-center gap-10 text-sm font-semibold uppercase">
 
-              {/* INICIO */}
-
               <li>
-
                 <Link
                   href="/"
                   className="border-b-2 border-[#C6922F] pb-1 text-[#C6922F]"
                 >
                   Inicio
                 </Link>
-
               </li>
 
-
-              {/* CATÁLOGO */}
-
               <li>
-
                 <Link
                   href="/catalogo"
                   className="transition hover:text-[#C6922F]"
                 >
                   Catálogo
                 </Link>
-
               </li>
 
-
-              {/* PRESUPUESTO */}
-
               <li>
-
                 <Link
                   href="/presupuesto"
                   className="transition hover:text-[#C6922F]"
                 >
                   Presupuesto
                 </Link>
-
               </li>
 
             </ul>
@@ -135,20 +136,38 @@ export default function Header() {
               ICONOS
           ================================================== */}
 
-          <div className="flex items-center gap-4 sm:gap-5">
-
+          <div
+            className="
+              flex
+              items-center
+              gap-1
+              sm:gap-2
+              lg:gap-4
+            "
+          >
 
             {/* BUSCAR */}
 
             <Link
               href="/catalogo"
               aria-label="Buscar productos"
-              className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F]"
+              className="
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+                rounded-full
+                text-[#222222]
+                transition
+                hover:bg-gray-100
+                hover:text-[#C6922F]
+              "
             >
 
               <Search
-                size={22}
-                strokeWidth={1.8}
+                size={23}
+                strokeWidth={1.9}
               />
 
             </Link>
@@ -160,12 +179,24 @@ export default function Header() {
               type="button"
               aria-label="Abrir carrito"
               onClick={openCart}
-              className="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F]"
+              className="
+                relative
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+                rounded-full
+                text-[#222222]
+                transition
+                hover:bg-gray-100
+                hover:text-[#C6922F]
+              "
             >
 
               <ShoppingCart
-                size={22}
-                strokeWidth={1.8}
+                size={23}
+                strokeWidth={1.9}
               />
 
               {/* CONTADOR */}
@@ -173,11 +204,11 @@ export default function Header() {
               <span
                 className="
                   absolute
-                  -right-1
-                  -top-1
+                  -right-0.5
+                  -top-0.5
                   flex
-                  h-5
-                  min-w-5
+                  h-[19px]
+                  min-w-[19px]
                   items-center
                   justify-center
                   rounded-full
@@ -185,7 +216,9 @@ export default function Header() {
                   px-1
                   text-[10px]
                   font-bold
+                  leading-none
                   text-white
+                  shadow-sm
                 "
               >
                 {cartCount}
@@ -194,9 +227,7 @@ export default function Header() {
             </button>
 
 
-            {/* =================================================
-                MENÚ CELULAR
-            ================================================== */}
+            {/* MENÚ CELULAR */}
 
             <button
               type="button"
@@ -209,18 +240,30 @@ export default function Header() {
               onClick={() =>
                 setMobileMenuOpen(!mobileMenuOpen)
               }
-              className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F] lg:hidden"
+              className="
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+                rounded-full
+                text-[#222222]
+                transition
+                hover:bg-gray-100
+                hover:text-[#C6922F]
+                lg:hidden
+              "
             >
 
               {mobileMenuOpen ? (
                 <X
-                  size={25}
-                  strokeWidth={1.8}
+                  size={26}
+                  strokeWidth={1.9}
                 />
               ) : (
                 <Menu
-                  size={25}
-                  strokeWidth={1.8}
+                  size={26}
+                  strokeWidth={1.9}
                 />
               )}
 
@@ -237,12 +280,19 @@ export default function Header() {
 
         {mobileMenuOpen && (
 
-          <div className="border-t border-gray-100 bg-white shadow-lg lg:hidden">
+          <div
+            className="
+              border-t
+              border-gray-100
+              bg-white
+              shadow-lg
+              lg:hidden
+            "
+          >
 
-            <nav className="px-5 py-5">
+            <nav className="px-5 py-4">
 
               <div className="flex flex-col">
-
 
                 {/* INICIO */}
 
@@ -251,7 +301,15 @@ export default function Header() {
                   onClick={() =>
                     setMobileMenuOpen(false)
                   }
-                  className="border-b border-gray-100 py-4 text-sm font-semibold uppercase text-[#C6922F]"
+                  className="
+                    border-b
+                    border-gray-100
+                    py-4
+                    text-sm
+                    font-semibold
+                    uppercase
+                    text-[#C6922F]
+                  "
                 >
                   Inicio
                 </Link>
@@ -264,7 +322,17 @@ export default function Header() {
                   onClick={() =>
                     setMobileMenuOpen(false)
                   }
-                  className="border-b border-gray-100 py-4 text-sm font-semibold uppercase text-[#111111] transition hover:text-[#C6922F]"
+                  className="
+                    border-b
+                    border-gray-100
+                    py-4
+                    text-sm
+                    font-semibold
+                    uppercase
+                    text-[#111111]
+                    transition
+                    hover:text-[#C6922F]
+                  "
                 >
                   Catálogo
                 </Link>
@@ -277,7 +345,17 @@ export default function Header() {
                   onClick={() =>
                     setMobileMenuOpen(false)
                   }
-                  className="border-b border-gray-100 py-4 text-sm font-semibold uppercase text-[#111111] transition hover:text-[#C6922F]"
+                  className="
+                    border-b
+                    border-gray-100
+                    py-4
+                    text-sm
+                    font-semibold
+                    uppercase
+                    text-[#111111]
+                    transition
+                    hover:text-[#C6922F]
+                  "
                 >
                   Presupuesto
                 </Link>
@@ -290,10 +368,22 @@ export default function Header() {
                   onClick={() =>
                     setMobileMenuOpen(false)
                   }
-                  className="flex items-center gap-3 py-4 text-sm font-semibold uppercase text-[#111111]"
+                  className="
+                    flex
+                    items-center
+                    gap-3
+                    py-4
+                    text-sm
+                    font-semibold
+                    uppercase
+                    text-[#111111]
+                  "
                 >
 
-                  <Search size={18} />
+                  <Search
+                    size={18}
+                    strokeWidth={2}
+                  />
 
                   Buscar productos
 
