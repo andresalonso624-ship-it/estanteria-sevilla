@@ -28,17 +28,11 @@ export default function Header() {
     cartCount,
   } = useCart();
 
-  const [mobileMenuOpen, setMobileMenuOpen] =
-    useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [catalogOpen, setCatalogOpen] = useState(false);
 
-  const [catalogOpen, setCatalogOpen] =
-    useState(false);
-
-  const [collections, setCollections] =
-    useState<Collection[]>([]);
-
-  const [loadingCollections, setLoadingCollections] =
-    useState(false);
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [loadingCollections, setLoadingCollections] = useState(false);
 
   /* =====================================================
      CARGAR CATEGORÍAS
@@ -57,25 +51,17 @@ export default function Header() {
       try {
         setLoadingCollections(true);
 
-        const response = await fetch(
-          "/api/collections"
-        );
+        const response = await fetch("/api/collections");
 
         if (!response.ok) {
-          throw new Error(
-            "No se pudieron cargar las categorías"
-          );
+          throw new Error("No se pudieron cargar las categorías");
         }
 
-        const data =
-          await response.json();
+        const data = await response.json();
 
         setCollections(data);
       } catch (error) {
-        console.error(
-          "Error cargando categorías:",
-          error
-        );
+        console.error("Error cargando categorías:", error);
       } finally {
         setLoadingCollections(false);
       }
@@ -96,6 +82,22 @@ export default function Header() {
     setMobileMenuOpen(false);
     setCatalogOpen(false);
   }
+
+  /* =====================================================
+     BLOQUEAR SCROLL DEL FONDO CUANDO EL MENÚ ESTÁ ABIERTO
+  ===================================================== */
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <>
@@ -134,25 +136,63 @@ export default function Header() {
           HEADER PRINCIPAL
       ================================================= */}
 
-      <header className="sticky top-0 z-[999] border-b border-gray-200 bg-white shadow-sm">
+      <header
+        className="
+          sticky top-0 z-[999]
+          border-b border-gray-800
+          bg-[#111111]
+          shadow-lg
+          lg:border-gray-200
+          lg:bg-white
+          lg:shadow-sm
+        "
+      >
 
-        <div className="mx-auto flex h-[74px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-20 lg:px-8">
+        <div
+          className="
+            mx-auto flex h-[74px]
+            max-w-7xl
+            items-center
+            justify-between
+            px-4
+            sm:px-6
+            lg:h-20
+            lg:px-8
+          "
+        >
 
-          {/* LOGO */}
+          {/* =================================================
+              LOGO
+          ================================================= */}
 
           <Link
             href="/"
             onClick={closeMobileMenu}
             className="flex shrink-0 items-center"
           >
+
             <Image
               src="/images/logo/logo.png"
               alt="Estantería Sevilla"
               width={150}
               height={55}
               priority
-              className="h-auto w-[125px] object-contain sm:w-[145px] lg:w-[150px]"
+              className="
+                h-auto
+                w-[125px]
+                rounded-md
+                bg-white
+                px-2
+                py-1
+                object-contain
+                sm:w-[145px]
+                lg:w-[150px]
+                lg:bg-transparent
+                lg:px-0
+                lg:py-0
+              "
             />
+
           </Link>
 
 
@@ -165,30 +205,43 @@ export default function Header() {
             <ul className="flex items-center gap-10 text-sm font-semibold uppercase">
 
               <li>
+
                 <Link
                   href="/"
-                  className="border-b-2 border-[#C6922F] pb-1 text-[#C6922F]"
+                  className="
+                    border-b-2
+                    border-[#C6922F]
+                    pb-1
+                    text-[#C6922F]
+                  "
                 >
                   Inicio
                 </Link>
+
               </li>
 
+
               <li>
+
                 <Link
                   href="/catalogo"
                   className="transition hover:text-[#C6922F]"
                 >
                   Catálogo
                 </Link>
+
               </li>
 
+
               <li>
+
                 <Link
                   href="/presupuesto"
                   className="transition hover:text-[#C6922F]"
                 >
                   Presupuesto
                 </Link>
+
               </li>
 
             </ul>
@@ -202,33 +255,64 @@ export default function Header() {
 
           <div className="flex items-center gap-4 sm:gap-5">
 
-            {/* BUSCAR */}
+
+            {/* =================================================
+                BUSCAR
+            ================================================= */}
 
             <Link
               href="/catalogo"
               aria-label="Buscar productos"
-              className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F]"
+              className="
+                flex h-10 w-10
+                items-center justify-center
+                rounded-full
+                text-white
+                transition
+                hover:bg-white/10
+                hover:text-[#C6922F]
+                lg:text-[#111111]
+                lg:hover:bg-gray-100
+              "
             >
+
               <Search
                 size={22}
                 strokeWidth={1.8}
               />
+
             </Link>
 
 
-            {/* CARRITO */}
+            {/* =================================================
+                CARRITO
+            ================================================= */}
 
             <button
               type="button"
               aria-label="Abrir carrito"
               onClick={openCart}
-              className="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F]"
+              className="
+                relative
+                flex h-10 w-10
+                items-center justify-center
+                rounded-full
+                text-white
+                transition
+                hover:bg-white/10
+                hover:text-[#C6922F]
+                lg:text-[#111111]
+                lg:hover:bg-gray-100
+              "
             >
 
               <ShoppingCart
                 size={22}
                 strokeWidth={1.8}
               />
+
+
+              {/* CONTADOR */}
 
               <span
                 className="
@@ -254,7 +338,9 @@ export default function Header() {
             </button>
 
 
-            {/* MENÚ MÓVIL */}
+            {/* =================================================
+                MENÚ MÓVIL
+            ================================================== */}
 
             <button
               type="button"
@@ -263,22 +349,26 @@ export default function Header() {
                   ? "Cerrar menú"
                   : "Abrir menú"
               }
-              aria-expanded={
-                mobileMenuOpen
-              }
+              aria-expanded={mobileMenuOpen}
               onClick={() => {
-                const newState =
-                  !mobileMenuOpen;
+                const newState = !mobileMenuOpen;
 
-                setMobileMenuOpen(
-                  newState
-                );
+                setMobileMenuOpen(newState);
 
                 if (!newState) {
                   setCatalogOpen(false);
                 }
               }}
-              className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F] lg:hidden"
+              className="
+                flex h-10 w-10
+                items-center justify-center
+                rounded-full
+                text-white
+                transition
+                hover:bg-white/10
+                hover:text-[#C6922F]
+                lg:hidden
+              "
             >
 
               {mobileMenuOpen ? (
@@ -306,223 +396,366 @@ export default function Header() {
 
         {mobileMenuOpen && (
 
-          <div className="border-t border-gray-100 bg-white shadow-lg lg:hidden">
+          <div
+            className="
+              fixed
+              inset-0
+              z-[1000]
+              bg-black/60
+              lg:hidden
+            "
+          >
 
-            <nav className="px-5 py-3">
+            {/* =================================================
+                PANEL
+            ================================================= */}
 
-              <div className="flex flex-col">
+            <div
+              className="
+                absolute
+                right-0
+                top-0
+                flex
+                h-[100dvh]
+                w-full
+                max-w-[420px]
+                flex-col
+                bg-white
+                shadow-2xl
+              "
+            >
 
-                {/* INICIO */}
+
+              {/* =================================================
+                  CABECERA DEL MENÚ
+              ================================================= */}
+
+              <div
+                className="
+                  flex
+                  h-[74px]
+                  shrink-0
+                  items-center
+                  justify-between
+                  border-b
+                  border-gray-100
+                  px-6
+                "
+              >
 
                 <Link
                   href="/"
-                  onClick={
-                    closeMobileMenu
-                  }
-                  className="
-                    border-b
-                    border-gray-100
-                    py-4
-                    text-sm
-                    font-semibold
-                    uppercase
-                    text-[#C6922F]
-                  "
+                  onClick={closeMobileMenu}
+                  className="flex items-center"
                 >
-                  Inicio
-                </Link>
 
-
-                {/* =================================================
-                    CATÁLOGO
-                ================================================== */}
-
-                <div className="border-b border-gray-100">
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setCatalogOpen(
-                        !catalogOpen
-                      )
-                    }
-                    aria-expanded={
-                      catalogOpen
-                    }
+                  <Image
+                    src="/images/logo/logo.png"
+                    alt="Estantería Sevilla"
+                    width={150}
+                    height={55}
+                    priority
                     className="
-                      flex
-                      w-full
-                      items-center
-                      justify-between
-                      py-4
-                      text-left
-                      text-sm
-                      font-semibold
-                      uppercase
-                      text-[#111111]
+                      h-auto
+                      w-[125px]
+                      object-contain
                     "
-                  >
+                  />
 
-                    <span>
-                      Catálogo
-                    </span>
-
-                    <ChevronDown
-                      size={19}
-                      className={`
-                        transition-transform
-                        ${
-                          catalogOpen
-                            ? "rotate-180 text-[#C6922F]"
-                            : ""
-                        }
-                      `}
-                    />
-
-                  </button>
-
-
-                  {/* =================================================
-                      CATEGORÍAS
-                  ================================================== */}
-
-                  {catalogOpen && (
-
-                    <div className="mb-3 overflow-hidden rounded-2xl border border-gray-100 bg-[#FCFAF7]">
-
-                      {/* TODOS */}
-
-                      <Link
-                        href="/catalogo"
-                        onClick={
-                          closeMobileMenu
-                        }
-                        className="
-                          flex
-                          items-center
-                          border-b
-                          border-gray-200
-                          px-4
-                          py-3.5
-                          text-sm
-                          font-semibold
-                          text-[#C6922F]
-                        "
-                      >
-                        Todos los productos
-                      </Link>
-
-
-                      {/* CATEGORÍAS */}
-
-                      {loadingCollections ? (
-
-                        <div className="px-4 py-5 text-sm text-gray-500">
-                          Cargando categorías...
-                        </div>
-
-                      ) : collections.length === 0 ? (
-
-                        <div className="px-4 py-5 text-sm text-gray-500">
-                          No hay categorías
-                          disponibles.
-                        </div>
-
-                      ) : (
-
-                        collections.map(
-                          (collection) => (
-
-                            <Link
-                              key={
-                                collection.id
-                              }
-                              href={`/catalogo?categoria=${encodeURIComponent(
-                                collection.handle
-                              )}`}
-                              onClick={
-                                closeMobileMenu
-                              }
-                              className="
-                                flex
-                                items-center
-                                border-b
-                                border-gray-200
-                                px-4
-                                py-3.5
-                                text-sm
-                                font-medium
-                                text-[#111111]
-                                last:border-b-0
-                                hover:bg-white
-                                hover:text-[#C6922F]
-                              "
-                            >
-                              {
-                                collection.title
-                              }
-                            </Link>
-
-                          )
-                        )
-
-                      )}
-
-                    </div>
-
-                  )}
-
-                </div>
-
-
-                {/* PRESUPUESTO */}
-
-                <Link
-                  href="/presupuesto"
-                  onClick={
-                    closeMobileMenu
-                  }
-                  className="
-                    border-b
-                    border-gray-100
-                    py-4
-                    text-sm
-                    font-semibold
-                    uppercase
-                    text-[#111111]
-                  "
-                >
-                  Presupuesto
                 </Link>
 
 
-                {/* BUSCAR */}
-
-                <Link
-                  href="/catalogo"
-                  onClick={
-                    closeMobileMenu
-                  }
+                <button
+                  type="button"
+                  onClick={closeMobileMenu}
                   className="
                     flex
+                    h-10
+                    w-10
                     items-center
-                    gap-3
-                    py-4
-                    text-sm
-                    font-semibold
-                    uppercase
-                    text-[#111111]
+                    justify-center
+                    rounded-full
+                    text-gray-900
+                    transition
+                    hover:bg-gray-100
                   "
+                  aria-label="Cerrar menú"
                 >
-                  <Search size={18} />
 
-                  Buscar productos
+                  <X
+                    size={25}
+                    strokeWidth={1.8}
+                  />
 
-                </Link>
+                </button>
 
               </div>
 
-            </nav>
+
+              {/* =================================================
+                  CONTENIDO CON SCROLL
+              ================================================== */}
+
+              <div
+                className="
+                  min-h-0
+                  flex-1
+                  overflow-y-auto
+                  overscroll-contain
+                  touch-pan-y
+                  pb-10
+                "
+              >
+
+                <nav className="px-6 pt-4">
+
+
+                  {/* =================================================
+                      INICIO
+                  ================================================= */}
+
+                  <Link
+                    href="/"
+                    onClick={closeMobileMenu}
+                    className="
+                      flex
+                      min-h-[58px]
+                      items-center
+                      border-b
+                      border-gray-100
+                      text-sm
+                      font-semibold
+                      text-[#111111]
+                      transition
+                      hover:text-[#C6922F]
+                    "
+                  >
+                    INICIO
+                  </Link>
+
+
+                  {/* =================================================
+                      CATÁLOGO
+                  ================================================= */}
+
+                  <div className="border-b border-gray-100">
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setCatalogOpen((prev) => !prev)
+                      }
+                      className="
+                        flex
+                        min-h-[58px]
+                        w-full
+                        items-center
+                        justify-between
+                        text-left
+                        text-sm
+                        font-semibold
+                        text-[#111111]
+                      "
+                    >
+
+                      <span>
+                        CATÁLOGO
+                      </span>
+
+
+                      <ChevronDown
+                        size={19}
+                        className={`
+                          text-[#C6922F]
+                          transition-transform
+                          duration-200
+                          ${
+                            catalogOpen
+                              ? "rotate-180"
+                              : ""
+                          }
+                        `}
+                      />
+
+                    </button>
+
+
+                    {/* =================================================
+                        CATEGORÍAS
+                    ================================================== */}
+
+                    {catalogOpen && (
+
+                      <div
+                        className="
+                          mb-4
+                          overflow-hidden
+                          rounded-2xl
+                          border
+                          border-[#eee9e1]
+                          bg-[#FCFAF7]
+                        "
+                      >
+
+
+                        {/* TODOS LOS PRODUCTOS */}
+
+                        <Link
+                          href="/catalogo"
+                          onClick={closeMobileMenu}
+                          className="
+                            flex
+                            min-h-[56px]
+                            items-center
+                            border-b
+                            border-[#eee9e1]
+                            px-4
+                            text-sm
+                            font-semibold
+                            text-[#C6922F]
+                            transition
+                            hover:bg-[#f5efe5]
+                          "
+                        >
+                          Todos los productos
+                        </Link>
+
+
+                        {/* CARGANDO */}
+
+                        {loadingCollections && (
+
+                          <div
+                            className="
+                              px-4
+                              py-5
+                              text-sm
+                              text-gray-500
+                            "
+                          >
+                            Cargando categorías...
+                          </div>
+
+                        )}
+
+
+                        {/* CATEGORÍAS */}
+
+                        {!loadingCollections &&
+                          collections.map(
+                            (collection) => (
+
+                              <Link
+                                key={collection.id}
+                                href={`/catalogo?categoria=${encodeURIComponent(
+                                  collection.handle
+                                )}`}
+                                onClick={closeMobileMenu}
+                                className="
+                                  flex
+                                  min-h-[46px]
+                                  items-center
+                                  border-b
+                                  border-[#eee9e1]
+                                  px-4
+                                  text-sm
+                                  text-[#222222]
+                                  transition
+                                  hover:bg-[#f5efe5]
+                                  hover:text-[#C6922F]
+                                "
+                              >
+
+                                {collection.title}
+
+                              </Link>
+
+                            )
+                          )}
+
+
+                        {/* SI NO HAY CATEGORÍAS */}
+
+                        {!loadingCollections &&
+                          collections.length === 0 && (
+
+                            <div
+                              className="
+                                px-4
+                                py-5
+                                text-sm
+                                text-gray-500
+                              "
+                            >
+                              No hay categorías disponibles.
+                            </div>
+
+                          )}
+
+                      </div>
+
+                    )}
+
+                  </div>
+
+
+                  {/* =================================================
+                      PRESUPUESTO
+                  ================================================== */}
+
+                  <Link
+                    href="/presupuesto"
+                    onClick={closeMobileMenu}
+                    className="
+                      flex
+                      min-h-[58px]
+                      items-center
+                      border-b
+                      border-gray-100
+                      text-sm
+                      font-semibold
+                      text-[#111111]
+                      transition
+                      hover:text-[#C6922F]
+                    "
+                  >
+                    PRESUPUESTO
+                  </Link>
+
+
+                  {/* =================================================
+                      BUSCAR PRODUCTOS
+                  ================================================== */}
+
+                  <Link
+                    href="/catalogo"
+                    onClick={closeMobileMenu}
+                    className="
+                      flex
+                      min-h-[58px]
+                      items-center
+                      gap-3
+                      text-sm
+                      font-semibold
+                      text-[#111111]
+                      transition
+                      hover:text-[#C6922F]
+                    "
+                  >
+
+                    <Search
+                      size={20}
+                    />
+
+                    BUSCAR PRODUCTOS
+
+                  </Link>
+
+                </nav>
+
+              </div>
+
+            </div>
 
           </div>
 
