@@ -54,14 +54,19 @@ export default function Header() {
         const response = await fetch("/api/collections");
 
         if (!response.ok) {
-          throw new Error("No se pudieron cargar las categorías");
+          throw new Error(
+            "No se pudieron cargar las categorías"
+          );
         }
 
         const data = await response.json();
 
         setCollections(data);
       } catch (error) {
-        console.error("Error cargando categorías:", error);
+        console.error(
+          "Error cargando categorías:",
+          error
+        );
       } finally {
         setLoadingCollections(false);
       }
@@ -107,9 +112,7 @@ export default function Header() {
 
       <div className="hidden bg-[#111111] text-white lg:block">
         <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-6 text-sm">
-
           <div className="flex items-center gap-8">
-
             <span>
               📦 Envíos a toda España
             </span>
@@ -121,16 +124,13 @@ export default function Header() {
             <span>
               ✉ Estanteriasevilla@163.com
             </span>
-
           </div>
 
           <span>
             Lunes - Viernes 10:00 - 20:00
           </span>
-
         </div>
       </div>
-
 
       {/* =================================================
           HEADER PRINCIPAL
@@ -139,15 +139,11 @@ export default function Header() {
       <header
         className="
           sticky top-0 z-[999]
-          border-b border-gray-800
-          bg-[#111111]
-          shadow-lg
-          lg:border-gray-200
-          lg:bg-white
-          lg:shadow-sm
+          border-b border-gray-200
+          bg-white
+          shadow-sm
         "
       >
-
         <div
           className="
             mx-auto flex h-[74px]
@@ -170,7 +166,6 @@ export default function Header() {
             onClick={closeMobileMenu}
             className="flex shrink-0 items-center"
           >
-
             <Image
               src="/images/logo/logo.png"
               alt="Estantería Sevilla"
@@ -192,20 +187,18 @@ export default function Header() {
                 lg:py-0
               "
             />
-
           </Link>
-
 
           {/* =================================================
               MENÚ ORDENADOR
           ================================================== */}
 
           <nav className="hidden lg:block">
-
             <ul className="flex items-center gap-10 text-sm font-semibold uppercase">
 
-              <li>
+              {/* INICIO */}
 
+              <li>
                 <Link
                   href="/"
                   className="
@@ -217,44 +210,46 @@ export default function Header() {
                 >
                   Inicio
                 </Link>
-
               </li>
 
+              {/* CATÁLOGO */}
 
               <li>
-
                 <Link
                   href="/catalogo"
-                  className="transition hover:text-[#C6922F]"
+                  className="
+                    text-[#111111]
+                    transition
+                    hover:text-[#C6922F]
+                  "
                 >
                   Catálogo
                 </Link>
-
               </li>
 
+              {/* PRESUPUESTO */}
 
               <li>
-
                 <Link
                   href="/presupuesto"
-                  className="transition hover:text-[#C6922F]"
+                  className="
+                    text-[#111111]
+                    transition
+                    hover:text-[#C6922F]
+                  "
                 >
                   Presupuesto
                 </Link>
-
               </li>
 
             </ul>
-
           </nav>
-
 
           {/* =================================================
               ICONOS
           ================================================== */}
 
           <div className="flex items-center gap-4 sm:gap-5">
-
 
             {/* =================================================
                 BUSCAR
@@ -267,22 +262,17 @@ export default function Header() {
                 flex h-10 w-10
                 items-center justify-center
                 rounded-full
-                text-white
+                text-[#111111]
                 transition
-                hover:bg-white/10
+                hover:bg-gray-100
                 hover:text-[#C6922F]
-                lg:text-[#111111]
-                lg:hover:bg-gray-100
               "
             >
-
               <Search
                 size={22}
                 strokeWidth={1.8}
               />
-
             </Link>
-
 
             {/* =================================================
                 CARRITO
@@ -297,20 +287,16 @@ export default function Header() {
                 flex h-10 w-10
                 items-center justify-center
                 rounded-full
-                text-white
+                text-[#111111]
                 transition
-                hover:bg-white/10
+                hover:bg-gray-100
                 hover:text-[#C6922F]
-                lg:text-[#111111]
-                lg:hover:bg-gray-100
               "
             >
-
               <ShoppingCart
                 size={22}
                 strokeWidth={1.8}
               />
-
 
               {/* CONTADOR */}
 
@@ -334,9 +320,7 @@ export default function Header() {
               >
                 {cartCount}
               </span>
-
             </button>
-
 
             {/* =================================================
                 MENÚ MÓVIL
@@ -351,7 +335,8 @@ export default function Header() {
               }
               aria-expanded={mobileMenuOpen}
               onClick={() => {
-                const newState = !mobileMenuOpen;
+                const newState =
+                  !mobileMenuOpen;
 
                 setMobileMenuOpen(newState);
 
@@ -363,14 +348,13 @@ export default function Header() {
                 flex h-10 w-10
                 items-center justify-center
                 rounded-full
-                text-white
+                text-[#111111]
                 transition
-                hover:bg-white/10
+                hover:bg-gray-100
                 hover:text-[#C6922F]
                 lg:hidden
               "
             >
-
               {mobileMenuOpen ? (
                 <X
                   size={25}
@@ -382,20 +366,16 @@ export default function Header() {
                   strokeWidth={1.8}
                 />
               )}
-
             </button>
 
           </div>
-
         </div>
-
 
         {/* =================================================
             MENÚ MÓVIL
         ================================================== */}
 
         {mobileMenuOpen && (
-
           <div
             className="
               fixed
@@ -425,7 +405,6 @@ export default function Header() {
               "
             >
 
-
               {/* =================================================
                   CABECERA DEL MENÚ
               ================================================= */}
@@ -448,7 +427,6 @@ export default function Header() {
                   onClick={closeMobileMenu}
                   className="flex items-center"
                 >
-
                   <Image
                     src="/images/logo/logo.png"
                     alt="Estantería Sevilla"
@@ -461,9 +439,7 @@ export default function Header() {
                       object-contain
                     "
                   />
-
                 </Link>
-
 
                 <button
                   type="button"
@@ -481,16 +457,13 @@ export default function Header() {
                   "
                   aria-label="Cerrar menú"
                 >
-
                   <X
                     size={25}
                     strokeWidth={1.8}
                   />
-
                 </button>
 
               </div>
-
 
               {/* =================================================
                   CONTENIDO CON SCROLL
@@ -508,7 +481,6 @@ export default function Header() {
               >
 
                 <nav className="px-6 pt-4">
-
 
                   {/* =================================================
                       INICIO
@@ -533,7 +505,6 @@ export default function Header() {
                     INICIO
                   </Link>
 
-
                   {/* =================================================
                       CATÁLOGO
                   ================================================= */}
@@ -543,7 +514,9 @@ export default function Header() {
                     <button
                       type="button"
                       onClick={() =>
-                        setCatalogOpen((prev) => !prev)
+                        setCatalogOpen(
+                          (prev) => !prev
+                        )
                       }
                       className="
                         flex
@@ -562,7 +535,6 @@ export default function Header() {
                         CATÁLOGO
                       </span>
 
-
                       <ChevronDown
                         size={19}
                         className={`
@@ -579,13 +551,11 @@ export default function Header() {
 
                     </button>
 
-
                     {/* =================================================
                         CATEGORÍAS
                     ================================================== */}
 
                     {catalogOpen && (
-
                       <div
                         className="
                           mb-4
@@ -596,7 +566,6 @@ export default function Header() {
                           bg-[#FCFAF7]
                         "
                       >
-
 
                         {/* TODOS LOS PRODUCTOS */}
 
@@ -620,11 +589,9 @@ export default function Header() {
                           Todos los productos
                         </Link>
 
-
                         {/* CARGANDO */}
 
                         {loadingCollections && (
-
                           <div
                             className="
                               px-4
@@ -635,22 +602,23 @@ export default function Header() {
                           >
                             Cargando categorías...
                           </div>
-
                         )}
-
 
                         {/* CATEGORÍAS */}
 
                         {!loadingCollections &&
                           collections.map(
                             (collection) => (
-
                               <Link
-                                key={collection.id}
+                                key={
+                                  collection.id
+                                }
                                 href={`/catalogo?categoria=${encodeURIComponent(
                                   collection.handle
                                 )}`}
-                                onClick={closeMobileMenu}
+                                onClick={
+                                  closeMobileMenu
+                                }
                                 className="
                                   flex
                                   min-h-[46px]
@@ -665,20 +633,18 @@ export default function Header() {
                                   hover:text-[#C6922F]
                                 "
                               >
-
-                                {collection.title}
-
+                                {
+                                  collection.title
+                                }
                               </Link>
-
                             )
                           )}
-
 
                         {/* SI NO HAY CATEGORÍAS */}
 
                         {!loadingCollections &&
-                          collections.length === 0 && (
-
+                          collections.length ===
+                            0 && (
                             <div
                               className="
                                 px-4
@@ -687,17 +653,15 @@ export default function Header() {
                                 text-gray-500
                               "
                             >
-                              No hay categorías disponibles.
+                              No hay categorías
+                              disponibles.
                             </div>
-
                           )}
 
                       </div>
-
                     )}
 
                   </div>
-
 
                   {/* =================================================
                       PRESUPUESTO
@@ -721,7 +685,6 @@ export default function Header() {
                   >
                     PRESUPUESTO
                   </Link>
-
 
                   {/* =================================================
                       BUSCAR PRODUCTOS
@@ -758,11 +721,9 @@ export default function Header() {
             </div>
 
           </div>
-
         )}
 
       </header>
-
 
       {/* =================================================
           CARRITO
