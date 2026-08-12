@@ -1,27 +1,46 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Search, X, ChevronDown } from "lucide-react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import {
+  Search,
+  X,
+  ChevronDown,
+} from "lucide-react";
+
 import ProductGrid from "./ProductGrid";
+
+
+/* =========================================================
+   TIPOS
+========================================================= */
 
 interface Variant {
   id: string;
   sku: string;
   availableForSale: boolean;
+
   price: {
     amount: string;
   };
+
   selectedOptions: {
     name: string;
     value: string;
   }[];
 }
 
+
 interface Collection {
   id: string;
   title: string;
   handle: string;
 }
+
 
 interface Product {
   id: string;
@@ -47,106 +66,320 @@ interface Product {
   };
 }
 
+
 type Props = {
   products: Product[];
   collections: Collection[];
 };
 
+
+/* =========================================================
+   NORMALIZAR TEXTO
+========================================================= */
+
 function normalizeText(text: string) {
   return text
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    );
 }
+
+
+/* =========================================================
+   COMPONENTE
+========================================================= */
 
 export default function CatalogProducts({
   products,
   collections,
 }: Props) {
-  const [search, setSearch] = useState("");
-  const [selectedCollection, setSelectedCollection] =
-    useState("all");
 
-  const [categoryOpen, setCategoryOpen] =
-    useState(false);
+  /* =======================================================
+     ESTADOS
+  ======================================================= */
 
-  const filteredProducts = useMemo(() => {
-    const term = normalizeText(search.trim());
+  const [search, setSearch] =
+    useState("");
 
-    return products.filter((product) => {
-      const title = normalizeText(
-        product.title || ""
+  const [
+    selectedCollection,
+    setSelectedCollection,
+  ] = useState("all");
+
+  const [
+    categoryOpen,
+    setCategoryOpen,
+  ] = useState(false);
+
+
+  /* =======================================================
+     LEER CATEGORÍA DE LA URL
+  ======================================================= */
+
+  useEffect(() => {
+
+    const params =
+      new URLSearchParams(
+        window.location.search
       );
 
-      const description = normalizeText(
-        product.description || ""
+    const category =
+      params.get("categoria");
+
+    if (category) {
+      setSelectedCollection(
+        category
       );
+    }
 
-      const skus =
-        product.variants?.nodes
-          ?.map((variant) =>
-            normalizeText(variant.sku || "")
-          )
-          .join(" ") || "";
+  }, []);
 
-      const matchesSearch =
-        !term ||
-        title.includes(term) ||
-        description.includes(term) ||
-        skus.includes(term);
 
-      const matchesCategory =
-        selectedCollection === "all" ||
-        product.collections?.nodes?.some(
-          (collection) =>
-            collection.handle === selectedCollection
+  /* =======================================================
+     FILTRAR PRODUCTOS
+  ======================================================= */
+
+  const filteredProducts =
+    useMemo(() => {
+
+      const term =
+        normalizeText(
+          search.trim()
         );
 
-      return matchesSearch && matchesCategory;
-    });
-  }, [
-    products,
-    search,
-    selectedCollection,
-  ]);
+
+      return products.filter(
+        (product) => {
+
+          /* ==============================================
+             NOMBRE
+          ============================================== */
+
+          const title =
+            normalizeText(
+              product.title || ""
+            );
+
+
+          /* ==============================================
+             DESCRIPCIÓN
+          ============================================== */
+
+          const description =
+            normalizeText(
+              product.description ||
+                ""
+            );
+
+
+          /* ==============================================
+             SKU
+          ============================================== */
+
+          const skus =
+            product.variants?.nodes
+              ?.map(
+                (variant) =>
+                  normalizeText(
+                    variant.sku || ""
+                  )
+              )
+              .join(" ") || "";
+
+
+          /* ==============================================
+             BUSCADOR
+          ============================================== */
+
+          const matchesSearch =
+            !term ||
+            title.includes(term) ||
+            description.includes(term) ||
+            skus.includes(term);
+
+
+          /* ==============================================
+             CATEGORÍA
+          ============================================== */
+
+          const matchesCategory =
+            selectedCollection ===
+              "all" ||
+            product.collections?.nodes?.some(
+              (collection) =>
+                collection.handle ===
+                selectedCollection
+            );
+
+
+          return (
+            matchesSearch &&
+            matchesCategory
+          );
+        }
+      );
+
+    }, [
+      products,
+      search,
+      selectedCollection,
+    ]);
+
+
+  /* =======================================================
+     NOMBRE CATEGORÍA
+  ======================================================= */
 
   const selectedCategoryName =
     selectedCollection === "all"
       ? "Todos los productos"
       : collections.find(
           (collection) =>
-            collection.handle === selectedCollection
-        )?.title ?? "Todos los productos";
+            collection.handle ===
+            selectedCollection
+        )?.title ??
+        "Todos los productos";
 
-  function selectCategory(handle: string) {
-    setSelectedCollection(handle);
+
+  /* =======================================================
+     SELECCIONAR CATEGORÍA
+  ======================================================= */
+
+  function selectCategory(
+    handle: string
+  ) {
+
+    setSelectedCollection(
+      handle
+    );
+
     setCategoryOpen(false);
+
+
+    const url =
+      new URL(
+        window.location.href
+      );
+
+
+    if (handle === "all") {
+
+      url.searchParams.delete(
+        "categoria"
+      );
+
+    } else {
+
+      url.searchParams.set(
+        "categoria",
+        handle
+      );
+
+    }
+
+
+    window.history.replaceState(
+      {},
+      "",
+      url.toString()
+    );
   }
+
+
+  /* =======================================================
+     LIMPIAR FILTROS
+  ======================================================= */
+
+  function clearFilters() {
+
+    setSearch("");
+
+    setSelectedCollection(
+      "all"
+    );
+
+    setCategoryOpen(false);
+
+
+    const url =
+      new URL(
+        window.location.href
+      );
+
+
+    url.searchParams.delete(
+      "categoria"
+    );
+
+
+    window.history.replaceState(
+      {},
+      "",
+      url.toString()
+    );
+  }
+
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
     <>
-      {/* ================================================
-          BUSCADOR + CATEGORÍAS
-      ================================================= */}
 
-      <div className="mx-auto mb-14 grid w-full max-w-6xl grid-cols-1 gap-6 px-6 md:grid-cols-2 md:items-end">
+      {/* ===================================================
+          FILTROS
+      =================================================== */}
 
-        {/* ==============================================
-            CATEGORÍAS - IZQUIERDA
-        =============================================== */}
+      <div
+        className="
+          mx-auto
+          mb-14
+          grid
+          w-full
+          max-w-6xl
+          grid-cols-1
+          gap-6
+          px-6
+          md:grid-cols-2
+          md:items-end
+        "
+      >
+
+        {/* =================================================
+            CATEGORÍAS
+        ================================================== */}
 
         <div className="w-full">
-          <label className="mb-3 block text-sm font-semibold text-[#111111]">
+
+          <label
+            className="
+              mb-3
+              block
+              text-sm
+              font-semibold
+              text-[#111111]
+            "
+          >
             Categorías
           </label>
 
+
           <div className="relative">
+
             <button
               type="button"
               onClick={() =>
-                setCategoryOpen(!categoryOpen)
+                setCategoryOpen(
+                  !categoryOpen
+                )
               }
-              aria-expanded={categoryOpen}
+              aria-expanded={
+                categoryOpen
+              }
               className="
                 flex
                 h-14
@@ -165,27 +398,61 @@ export default function CatalogProducts({
                 hover:shadow-md
               "
             >
+
               <div className="min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C6922F]">
+
+                <p
+                  className="
+                    text-[10px]
+                    font-semibold
+                    uppercase
+                    tracking-[0.22em]
+                    text-[#C6922F]
+                  "
+                >
                   Categorías
                 </p>
 
-                <p className="mt-0.5 truncate text-base font-semibold text-[#111111]">
-                  {selectedCategoryName}
+
+                <p
+                  className="
+                    mt-0.5
+                    truncate
+                    text-base
+                    font-semibold
+                    text-[#111111]
+                  "
+                >
+                  {
+                    selectedCategoryName
+                  }
                 </p>
+
               </div>
+
 
               <ChevronDown
                 size={20}
-                className={`shrink-0 text-[#111111] transition-transform ${
-                  categoryOpen
-                    ? "rotate-180"
-                    : ""
-                }`}
+                className={`
+                  shrink-0
+                  transition-transform
+                  ${
+                    categoryOpen
+                      ? "rotate-180 text-[#C6922F]"
+                      : "text-[#111111]"
+                  }
+                `}
               />
+
             </button>
 
+
+            {/* =============================================
+                MENÚ CATEGORÍAS
+            ============================================== */}
+
             {categoryOpen && (
+
               <div
                 className="
                   absolute
@@ -203,15 +470,19 @@ export default function CatalogProducts({
                   shadow-xl
                 "
               >
+
+                {/* TODOS */}
+
                 <button
                   type="button"
                   onClick={() =>
-                    selectCategory("all")
+                    selectCategory(
+                      "all"
+                    )
                   }
                   className={`
                     flex
                     w-full
-                    items-center
                     rounded-xl
                     px-4
                     py-3
@@ -220,7 +491,8 @@ export default function CatalogProducts({
                     font-semibold
                     transition
                     ${
-                      selectedCollection === "all"
+                      selectedCollection ===
+                      "all"
                         ? "bg-[#C6922F]/10 text-[#C6922F]"
                         : "text-[#111111] hover:bg-gray-50"
                     }
@@ -229,10 +501,16 @@ export default function CatalogProducts({
                   Todos los productos
                 </button>
 
+
+                {/* CATEGORÍAS */}
+
                 {collections.map(
                   (collection) => (
+
                     <button
-                      key={collection.id}
+                      key={
+                        collection.id
+                      }
                       type="button"
                       onClick={() =>
                         selectCategory(
@@ -242,7 +520,6 @@ export default function CatalogProducts({
                       className={`
                         flex
                         w-full
-                        items-center
                         rounded-xl
                         px-4
                         py-3
@@ -258,28 +535,45 @@ export default function CatalogProducts({
                         }
                       `}
                     >
-                      {collection.title}
+                      {
+                        collection.title
+                      }
                     </button>
+
                   )
                 )}
+
               </div>
+
             )}
+
           </div>
+
         </div>
 
-        {/* ==============================================
-            BUSCADOR - DERECHA
-        =============================================== */}
+
+        {/* =================================================
+            BUSCADOR
+        ================================================== */}
 
         <div className="w-full">
+
           <label
             htmlFor="catalog-search"
-            className="mb-3 block text-sm font-semibold text-[#111111]"
+            className="
+              mb-3
+              block
+              text-sm
+              font-semibold
+              text-[#111111]
+            "
           >
             Buscar producto
           </label>
 
+
           <div className="relative">
+
             <Search
               size={21}
               className="
@@ -291,12 +585,15 @@ export default function CatalogProducts({
               "
             />
 
+
             <input
               id="catalog-search"
               type="text"
               value={search}
               onChange={(e) =>
-                setSearch(e.target.value)
+                setSearch(
+                  e.target.value
+                )
               }
               placeholder="Nombre, SKU o descripción..."
               className="
@@ -320,12 +617,15 @@ export default function CatalogProducts({
               "
             />
 
+
             {search && (
+
               <button
                 type="button"
                 onClick={() =>
                   setSearch("")
                 }
+                aria-label="Limpiar búsqueda"
                 className="
                   absolute
                   right-4
@@ -338,55 +638,134 @@ export default function CatalogProducts({
                   hover:bg-gray-100
                   hover:text-black
                 "
-                aria-label="Limpiar búsqueda"
               >
                 <X size={18} />
               </button>
+
             )}
+
           </div>
 
+
+          {/* RESULTADOS */}
+
           {(search ||
-            selectedCollection !== "all") && (
-            <p className="mt-3 text-sm text-gray-500">
-              {filteredProducts.length}{" "}
-              {filteredProducts.length === 1
-                ? "producto encontrado"
-                : "productos encontrados"}
-            </p>
+            selectedCollection !==
+              "all") && (
+
+            <div
+              className="
+                mt-3
+                flex
+                items-center
+                justify-between
+              "
+            >
+
+              <p
+                className="
+                  text-sm
+                  text-gray-500
+                "
+              >
+                {filteredProducts.length}{" "}
+                {filteredProducts.length ===
+                1
+                  ? "producto encontrado"
+                  : "productos encontrados"}
+              </p>
+
+
+              <button
+                type="button"
+                onClick={
+                  clearFilters
+                }
+                className="
+                  text-sm
+                  font-semibold
+                  text-[#C6922F]
+                  hover:text-[#A8791F]
+                "
+              >
+                Limpiar
+              </button>
+
+            </div>
+
           )}
+
         </div>
+
       </div>
 
-      {/* ================================================
-          PRODUCTOS
-      ================================================= */}
 
-      {filteredProducts.length > 0 ? (
+      {/* ===================================================
+          PRODUCTOS
+      =================================================== */}
+
+      {filteredProducts.length >
+      0 ? (
+
         <ProductGrid
-          products={filteredProducts}
+          products={
+            filteredProducts
+          }
         />
+
       ) : (
-        <div className="mx-auto max-w-6xl rounded-3xl border border-gray-200 bg-gray-50 px-6 py-20 text-center">
+
+        <div
+          className="
+            mx-6
+            rounded-3xl
+            border
+            border-gray-200
+            bg-gray-50
+            px-6
+            py-20
+            text-center
+          "
+        >
+
           <Search
             size={42}
-            className="mx-auto mb-5 text-gray-300"
+            className="
+              mx-auto
+              mb-5
+              text-gray-300
+            "
           />
 
-          <h2 className="text-2xl font-bold text-gray-800">
-            No encontramos ese producto
+
+          <h2
+            className="
+              text-2xl
+              font-bold
+              text-gray-800
+            "
+          >
+            No encontramos ese
+            producto
           </h2>
 
-          <p className="mt-2 text-gray-500">
-            Prueba buscando con otro nombre,
-            SKU o categoría.
+
+          <p
+            className="
+              mt-2
+              text-gray-500
+            "
+          >
+            Prueba buscando con otro
+            nombre, SKU o categoría.
           </p>
+
 
           <button
             type="button"
-            onClick={() => {
-              setSearch("");
-              setSelectedCollection("all");
-            }}
+            onClick={
+              clearFilters
+            }
             className="
               mt-6
               rounded-xl
@@ -401,8 +780,11 @@ export default function CatalogProducts({
           >
             Ver todo el catálogo
           </button>
+
         </div>
+
       )}
+
     </>
   );
 }

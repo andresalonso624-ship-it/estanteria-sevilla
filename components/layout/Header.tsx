@@ -2,11 +2,23 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Search, ShoppingCart, Menu, X } from "lucide-react";
-import { useState } from "react";
+import {
+  Search,
+  ShoppingCart,
+  Menu,
+  X,
+  ChevronDown,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 import CartDrawer from "@/components/cart/CartDrawer";
 import { useCart } from "@/components/cart/CartProvider";
+
+interface Collection {
+  id: string;
+  title: string;
+  handle: string;
+}
 
 export default function Header() {
   const {
@@ -16,22 +28,98 @@ export default function Header() {
     cartCount,
   } = useCart();
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] =
+    useState(false);
+
+  const [catalogOpen, setCatalogOpen] =
+    useState(false);
+
+  const [collections, setCollections] =
+    useState<Collection[]>([]);
+
+  const [loadingCollections, setLoadingCollections] =
+    useState(false);
+
+  /* =====================================================
+     CARGAR CATEGORÍAS
+  ===================================================== */
+
+  useEffect(() => {
+    if (!mobileMenuOpen || !catalogOpen) {
+      return;
+    }
+
+    if (collections.length > 0) {
+      return;
+    }
+
+    async function loadCollections() {
+      try {
+        setLoadingCollections(true);
+
+        const response = await fetch(
+          "/api/collections"
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            "No se pudieron cargar las categorías"
+          );
+        }
+
+        const data =
+          await response.json();
+
+        setCollections(data);
+      } catch (error) {
+        console.error(
+          "Error cargando categorías:",
+          error
+        );
+      } finally {
+        setLoadingCollections(false);
+      }
+    }
+
+    loadCollections();
+  }, [
+    mobileMenuOpen,
+    catalogOpen,
+    collections.length,
+  ]);
+
+  /* =====================================================
+     CERRAR MENÚ
+  ===================================================== */
+
+  function closeMobileMenu() {
+    setMobileMenuOpen(false);
+    setCatalogOpen(false);
+  }
 
   return (
     <>
-      {/* =====================================================
+      {/* =================================================
           BARRA SUPERIOR
-          SOLO ORDENADOR
-      ====================================================== */}
+      ================================================= */}
 
       <div className="hidden bg-[#111111] text-white lg:block">
         <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-6 text-sm">
 
           <div className="flex items-center gap-8">
-            <span>📦 Envíos a toda España</span>
-            <span>☎ +34 688 097 157</span>
-            <span>✉ Estanteriasevilla@163.com</span>
+
+            <span>
+              📦 Envíos a toda España
+            </span>
+
+            <span>
+              ☎ +34 688 097 157
+            </span>
+
+            <span>
+              ✉ Estanteriasevilla@163.com
+            </span>
+
           </div>
 
           <span>
@@ -42,58 +130,34 @@ export default function Header() {
       </div>
 
 
-      {/* =====================================================
+      {/* =================================================
           HEADER PRINCIPAL
-      ====================================================== */}
+      ================================================= */}
 
       <header className="sticky top-0 z-[999] border-b border-gray-200 bg-white shadow-sm">
 
-        <div
-          className="
-            mx-auto
-            flex
-            h-[68px]
-            max-w-7xl
-            items-center
-            justify-between
-            px-4
-            sm:h-[74px]
-            sm:px-6
-            lg:h-20
-            lg:px-8
-          "
-        >
+        <div className="mx-auto flex h-[74px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-20 lg:px-8">
 
-          {/* =================================================
-              LOGO
-          ================================================== */}
+          {/* LOGO */}
 
           <Link
             href="/"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={closeMobileMenu}
             className="flex shrink-0 items-center"
           >
-
             <Image
               src="/images/logo/logo.png"
               alt="Estantería Sevilla"
               width={150}
               height={55}
               priority
-              className="
-                h-auto
-                w-[112px]
-                object-contain
-                sm:w-[135px]
-                lg:w-[150px]
-              "
+              className="h-auto w-[125px] object-contain sm:w-[145px] lg:w-[150px]"
             />
-
           </Link>
 
 
           {/* =================================================
-              NAVEGACIÓN ORDENADOR
+              MENÚ ORDENADOR
           ================================================== */}
 
           <nav className="hidden lg:block">
@@ -136,40 +200,19 @@ export default function Header() {
               ICONOS
           ================================================== */}
 
-          <div
-            className="
-              flex
-              items-center
-              gap-1
-              sm:gap-2
-              lg:gap-4
-            "
-          >
+          <div className="flex items-center gap-4 sm:gap-5">
 
             {/* BUSCAR */}
 
             <Link
               href="/catalogo"
               aria-label="Buscar productos"
-              className="
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-full
-                text-[#222222]
-                transition
-                hover:bg-gray-100
-                hover:text-[#C6922F]
-              "
+              className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F]"
             >
-
               <Search
-                size={23}
-                strokeWidth={1.9}
+                size={22}
+                strokeWidth={1.8}
               />
-
             </Link>
 
 
@@ -179,36 +222,22 @@ export default function Header() {
               type="button"
               aria-label="Abrir carrito"
               onClick={openCart}
-              className="
-                relative
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-full
-                text-[#222222]
-                transition
-                hover:bg-gray-100
-                hover:text-[#C6922F]
-              "
+              className="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F]"
             >
 
               <ShoppingCart
-                size={23}
-                strokeWidth={1.9}
+                size={22}
+                strokeWidth={1.8}
               />
-
-              {/* CONTADOR */}
 
               <span
                 className="
                   absolute
-                  -right-0.5
-                  -top-0.5
+                  -right-1
+                  -top-1
                   flex
-                  h-[19px]
-                  min-w-[19px]
+                  h-5
+                  min-w-5
                   items-center
                   justify-center
                   rounded-full
@@ -216,9 +245,7 @@ export default function Header() {
                   px-1
                   text-[10px]
                   font-bold
-                  leading-none
                   text-white
-                  shadow-sm
                 "
               >
                 {cartCount}
@@ -227,7 +254,7 @@ export default function Header() {
             </button>
 
 
-            {/* MENÚ CELULAR */}
+            {/* MENÚ MÓVIL */}
 
             <button
               type="button"
@@ -236,34 +263,33 @@ export default function Header() {
                   ? "Cerrar menú"
                   : "Abrir menú"
               }
-              aria-expanded={mobileMenuOpen}
-              onClick={() =>
-                setMobileMenuOpen(!mobileMenuOpen)
+              aria-expanded={
+                mobileMenuOpen
               }
-              className="
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-full
-                text-[#222222]
-                transition
-                hover:bg-gray-100
-                hover:text-[#C6922F]
-                lg:hidden
-              "
+              onClick={() => {
+                const newState =
+                  !mobileMenuOpen;
+
+                setMobileMenuOpen(
+                  newState
+                );
+
+                if (!newState) {
+                  setCatalogOpen(false);
+                }
+              }}
+              className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 hover:text-[#C6922F] lg:hidden"
             >
 
               {mobileMenuOpen ? (
                 <X
-                  size={26}
-                  strokeWidth={1.9}
+                  size={25}
+                  strokeWidth={1.8}
                 />
               ) : (
                 <Menu
-                  size={26}
-                  strokeWidth={1.9}
+                  size={25}
+                  strokeWidth={1.8}
                 />
               )}
 
@@ -274,23 +300,15 @@ export default function Header() {
         </div>
 
 
-        {/* =====================================================
-            MENÚ DESPLEGABLE CELULAR
-        ====================================================== */}
+        {/* =================================================
+            MENÚ MÓVIL
+        ================================================== */}
 
         {mobileMenuOpen && (
 
-          <div
-            className="
-              border-t
-              border-gray-100
-              bg-white
-              shadow-lg
-              lg:hidden
-            "
-          >
+          <div className="border-t border-gray-100 bg-white shadow-lg lg:hidden">
 
-            <nav className="px-5 py-4">
+            <nav className="px-5 py-3">
 
               <div className="flex flex-col">
 
@@ -298,8 +316,8 @@ export default function Header() {
 
                 <Link
                   href="/"
-                  onClick={() =>
-                    setMobileMenuOpen(false)
+                  onClick={
+                    closeMobileMenu
                   }
                   className="
                     border-b
@@ -315,35 +333,154 @@ export default function Header() {
                 </Link>
 
 
-                {/* CATÁLOGO */}
+                {/* =================================================
+                    CATÁLOGO
+                ================================================== */}
 
-                <Link
-                  href="/catalogo"
-                  onClick={() =>
-                    setMobileMenuOpen(false)
-                  }
-                  className="
-                    border-b
-                    border-gray-100
-                    py-4
-                    text-sm
-                    font-semibold
-                    uppercase
-                    text-[#111111]
-                    transition
-                    hover:text-[#C6922F]
-                  "
-                >
-                  Catálogo
-                </Link>
+                <div className="border-b border-gray-100">
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCatalogOpen(
+                        !catalogOpen
+                      )
+                    }
+                    aria-expanded={
+                      catalogOpen
+                    }
+                    className="
+                      flex
+                      w-full
+                      items-center
+                      justify-between
+                      py-4
+                      text-left
+                      text-sm
+                      font-semibold
+                      uppercase
+                      text-[#111111]
+                    "
+                  >
+
+                    <span>
+                      Catálogo
+                    </span>
+
+                    <ChevronDown
+                      size={19}
+                      className={`
+                        transition-transform
+                        ${
+                          catalogOpen
+                            ? "rotate-180 text-[#C6922F]"
+                            : ""
+                        }
+                      `}
+                    />
+
+                  </button>
+
+
+                  {/* =================================================
+                      CATEGORÍAS
+                  ================================================== */}
+
+                  {catalogOpen && (
+
+                    <div className="mb-3 overflow-hidden rounded-2xl border border-gray-100 bg-[#FCFAF7]">
+
+                      {/* TODOS */}
+
+                      <Link
+                        href="/catalogo"
+                        onClick={
+                          closeMobileMenu
+                        }
+                        className="
+                          flex
+                          items-center
+                          border-b
+                          border-gray-200
+                          px-4
+                          py-3.5
+                          text-sm
+                          font-semibold
+                          text-[#C6922F]
+                        "
+                      >
+                        Todos los productos
+                      </Link>
+
+
+                      {/* CATEGORÍAS */}
+
+                      {loadingCollections ? (
+
+                        <div className="px-4 py-5 text-sm text-gray-500">
+                          Cargando categorías...
+                        </div>
+
+                      ) : collections.length === 0 ? (
+
+                        <div className="px-4 py-5 text-sm text-gray-500">
+                          No hay categorías
+                          disponibles.
+                        </div>
+
+                      ) : (
+
+                        collections.map(
+                          (collection) => (
+
+                            <Link
+                              key={
+                                collection.id
+                              }
+                              href={`/catalogo?categoria=${encodeURIComponent(
+                                collection.handle
+                              )}`}
+                              onClick={
+                                closeMobileMenu
+                              }
+                              className="
+                                flex
+                                items-center
+                                border-b
+                                border-gray-200
+                                px-4
+                                py-3.5
+                                text-sm
+                                font-medium
+                                text-[#111111]
+                                last:border-b-0
+                                hover:bg-white
+                                hover:text-[#C6922F]
+                              "
+                            >
+                              {
+                                collection.title
+                              }
+                            </Link>
+
+                          )
+                        )
+
+                      )}
+
+                    </div>
+
+                  )}
+
+                </div>
 
 
                 {/* PRESUPUESTO */}
 
                 <Link
                   href="/presupuesto"
-                  onClick={() =>
-                    setMobileMenuOpen(false)
+                  onClick={
+                    closeMobileMenu
                   }
                   className="
                     border-b
@@ -353,8 +490,6 @@ export default function Header() {
                     font-semibold
                     uppercase
                     text-[#111111]
-                    transition
-                    hover:text-[#C6922F]
                   "
                 >
                   Presupuesto
@@ -365,8 +500,8 @@ export default function Header() {
 
                 <Link
                   href="/catalogo"
-                  onClick={() =>
-                    setMobileMenuOpen(false)
+                  onClick={
+                    closeMobileMenu
                   }
                   className="
                     flex
@@ -379,11 +514,7 @@ export default function Header() {
                     text-[#111111]
                   "
                 >
-
-                  <Search
-                    size={18}
-                    strokeWidth={2}
-                  />
+                  <Search size={18} />
 
                   Buscar productos
 
@@ -400,9 +531,9 @@ export default function Header() {
       </header>
 
 
-      {/* =====================================================
+      {/* =================================================
           CARRITO
-      ====================================================== */}
+      ================================================== */}
 
       <CartDrawer
         open={open}
