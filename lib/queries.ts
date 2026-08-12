@@ -1,5 +1,9 @@
 import { shopifyFetch } from "./shopify";
 
+/* =========================================================
+   OBTENER TODOS LOS PRODUCTOS
+========================================================= */
+
 export async function getProducts() {
   const allProducts: any[] = [];
 
@@ -65,7 +69,8 @@ export async function getProducts() {
       }
     `;
 
-    const data = await shopifyFetch(query);
+    const data =
+      await shopifyFetch(query);
 
     allProducts.push(
       ...data.products.nodes
@@ -80,7 +85,6 @@ export async function getProducts() {
 
   return allProducts;
 }
-
 
 /* =========================================================
    OBTENER TODAS LAS COLECCIONES

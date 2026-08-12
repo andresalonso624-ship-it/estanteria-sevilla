@@ -1,6 +1,5 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
 import CatalogProducts from "@/components/catalog/CatalogProducts";
 
 import {
@@ -9,10 +8,11 @@ import {
 } from "@/lib/queries";
 
 export default async function CatalogoPage() {
-  const [products, collections] = await Promise.all([
-    getProducts(),
-    getCollections(),
-  ]);
+  const [products, collections] =
+    await Promise.all([
+      getProducts(),
+      getCollections(),
+    ]);
 
   return (
     <>
@@ -20,9 +20,9 @@ export default async function CatalogoPage() {
 
       <main className="min-h-screen bg-[#FCFAF7]">
 
-        {/* =====================================================
-            CABECERA DEL CATÁLOGO
-        ====================================================== */}
+        {/* ==========================================
+            CABECERA
+        =========================================== */}
 
         <section className="px-6 pb-10 pt-10 text-center">
 
@@ -33,16 +33,15 @@ export default async function CatalogoPage() {
           <div className="mx-auto mt-5 h-1 w-20 rounded-full bg-[#C6922F]" />
 
           <p className="mx-auto mt-5 max-w-2xl text-base text-gray-600 sm:text-lg">
-            Explora todos nuestros productos diseñados
-            para tu negocio.
+            Explora todos nuestros productos
+            diseñados para tu negocio.
           </p>
 
         </section>
 
-
-        {/* =====================================================
-            BUSCADOR + CATEGORÍAS + PRODUCTOS
-        ====================================================== */}
+        {/* ==========================================
+            CATÁLOGO
+        =========================================== */}
 
         <section className="pb-24">
 
