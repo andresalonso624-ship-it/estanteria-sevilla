@@ -1,10 +1,18 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import ProductGrid from "@/components/catalog/ProductGrid";
-import { getProducts } from "@/lib/queries";
+
+import CatalogProducts from "@/components/catalog/CatalogProducts";
+
+import {
+  getProducts,
+  getCollections,
+} from "@/lib/queries";
 
 export default async function CatalogoPage() {
-  const products = await getProducts();
+  const [products, collections] = await Promise.all([
+    getProducts(),
+    getCollections(),
+  ]);
 
   return (
     <>
@@ -12,10 +20,11 @@ export default async function CatalogoPage() {
 
       <main className="min-h-screen bg-[#FCFAF7]">
 
-        {/* CABECERA DEL CATÁLOGO */}
+        {/* =====================================================
+            CABECERA DEL CATÁLOGO
+        ====================================================== */}
+
         <section className="px-6 pb-10 pt-10 text-center">
-
-
 
           <h1 className="text-4xl font-bold tracking-tight text-[#111111] sm:text-5xl">
             CATÁLOGO
@@ -24,14 +33,24 @@ export default async function CatalogoPage() {
           <div className="mx-auto mt-5 h-1 w-20 rounded-full bg-[#C6922F]" />
 
           <p className="mx-auto mt-5 max-w-2xl text-base text-gray-600 sm:text-lg">
-            Explora todos tus productos diseñados para tu negocio.
+            Explora todos nuestros productos diseñados
+            para tu negocio.
           </p>
 
         </section>
 
-        {/* PRODUCTOS */}
+
+        {/* =====================================================
+            BUSCADOR + CATEGORÍAS + PRODUCTOS
+        ====================================================== */}
+
         <section className="pb-24">
-          <ProductGrid products={products} />
+
+          <CatalogProducts
+            products={products}
+            collections={collections}
+          />
+
         </section>
 
       </main>

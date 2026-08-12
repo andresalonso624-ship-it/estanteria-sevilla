@@ -47,6 +47,14 @@ export async function getProducts() {
                 }
               }
             }
+
+            collections(first: 20) {
+              nodes {
+                id
+                title
+                handle
+              }
+            }
           }
 
           pageInfo {
@@ -59,11 +67,66 @@ export async function getProducts() {
 
     const data = await shopifyFetch(query);
 
-    allProducts.push(...data.products.nodes);
+    allProducts.push(
+      ...data.products.nodes
+    );
 
-    hasNextPage = data.products.pageInfo.hasNextPage;
-    cursor = data.products.pageInfo.endCursor;
+    hasNextPage =
+      data.products.pageInfo.hasNextPage;
+
+    cursor =
+      data.products.pageInfo.endCursor;
   }
 
   return allProducts;
+}
+
+
+/* =========================================================
+   OBTENER TODAS LAS COLECCIONES
+========================================================= */
+
+export async function getCollections() {
+  const allCollections: any[] = [];
+
+  let cursor: string | null = null;
+  let hasNextPage = true;
+
+  while (hasNextPage) {
+    const after = cursor
+      ? `, after: ${JSON.stringify(cursor)}`
+      : "";
+
+    const query = `
+      {
+        collections(first: 50${after}) {
+          nodes {
+            id
+            title
+            handle
+          }
+
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    `;
+
+    const data =
+      await shopifyFetch(query);
+
+    allCollections.push(
+      ...data.collections.nodes
+    );
+
+    hasNextPage =
+      data.collections.pageInfo.hasNextPage;
+
+    cursor =
+      data.collections.pageInfo.endCursor;
+  }
+
+  return allCollections;
 }
