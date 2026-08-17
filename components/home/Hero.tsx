@@ -4,481 +4,418 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+const heroImages = [
+  "/images/hero/producto-1.png",
+  "/images/hero/producto-2.png",
+  "/images/hero/producto-3.png",
+];
+
 export default function Hero() {
-  const [scrollY, setScrollY] = useState(0);
+  const [currentImage, setCurrentImage] = useState(0);
+
+  // ============================================================
+  // CAMBIO AUTOMÁTICO DE IMAGEN
+  // ============================================================
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll, {
-      passive: true,
-    });
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => {
+        return (prev + 1) % heroImages.length;
+      });
+    }, 5000);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      clearInterval(interval);
     };
   }, []);
 
-  const imageScale = Math.min(1 + scrollY * 0.00008, 1.08);
-  const imageMove = Math.min(scrollY * 0.08, 35);
-  const contentMove = Math.min(scrollY * 0.04, 20);
-  const contentOpacity = Math.max(
-    1 - scrollY * 0.002,
-    0.7
-  );
-
   return (
-    <section className="w-full overflow-hidden bg-[#F7F4EE]">
+    <section className="relative w-full overflow-hidden bg-black">
 
-      {/* =====================================================
-          CELULAR
-      ====================================================== */}
+      {/* ========================================================
+          PORTADA
+      ========================================================= */}
 
-      <div className="block md:hidden">
+      <div
+        className="
+          relative
+          h-[720px]
+          w-full
+          sm:h-[760px]
+          lg:h-[780px]
+          xl:h-[820px]
+        "
+      >
 
-        {/* IMAGEN PRINCIPAL */}
+        {/* ======================================================
+            IMÁGENES
+        ======================================================= */}
 
-        <div className="relative h-[285px] w-full overflow-hidden">
-
-          <Image
-            src="/images/hero/hero.jpg"
-            alt="Estantería comercial para tiendas y negocios"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-          />
-
-          {/* DEGRADADO INFERIOR */}
-
+        {heroImages.map((image, index) => (
           <div
-            className="
+            key={image}
+            className={`
               absolute
-              inset-x-0
-              bottom-0
-              h-28
-              bg-gradient-to-t
-              from-[#F7F4EE]
-              via-[#F7F4EE]/40
-              to-transparent
-            "
-          />
+              inset-0
+              transition-opacity
+              duration-[1400ms]
+              ease-in-out
+              ${
+                index === currentImage
+                  ? "z-[1] opacity-100"
+                  : "z-0 opacity-0"
+              }
+            `}
+          >
 
-        </div>
+            <Image
+              src={image}
+              alt={
+                index === 0
+                  ? "Mobiliario comercial para tiendas"
+                  : "Estantería comercial para tienda de ropa"
+              }
+              fill
+              priority={index === 0}
+              sizes="100vw"
+              className={`
+                object-cover
+                object-center
+                transition-transform
+                duration-[7000ms]
+                ease-out
+                ${
+                  index === currentImage
+                    ? "scale-100"
+                    : "scale-110"
+                }
+              `}
+            />
+
+          </div>
+        ))}
 
 
-        {/* =================================================
-            TARJETA PRINCIPAL
-        ================================================== */}
+        {/* ======================================================
+            CAPA OSCURA GENERAL
+        ======================================================= */}
+
+        <div className="absolute inset-0 z-[2] bg-black/20" />
+
+
+        {/* ======================================================
+            DEGRADADO IZQUIERDO
+        ======================================================= */}
+
+        <div
+          className="
+            absolute
+            inset-0
+            z-[3]
+            bg-gradient-to-r
+            from-black/75
+            via-black/45
+            to-black/10
+          "
+        />
+
+
+        {/* ======================================================
+            DEGRADADO INFERIOR
+        ======================================================= */}
+
+        <div
+          className="
+            absolute
+            inset-x-0
+            bottom-0
+            z-[3]
+            h-64
+            bg-gradient-to-t
+            from-black/65
+            via-black/20
+            to-transparent
+          "
+        />
+
+
+        {/* ======================================================
+            CONTENIDO PRINCIPAL
+        ======================================================= */}
 
         <div
           className="
             relative
-            z-10
-            mx-4
-            -mt-14
-            rounded-[26px]
-            border
-            border-white
-            bg-white
-            px-5
-            pb-6
-            pt-6
-            text-center
-            shadow-[0_12px_35px_rgba(0,0,0,0.12)]
+            z-[10]
+            mx-auto
+            flex
+            h-full
+            max-w-7xl
+            items-center
+            px-6
+            sm:px-8
+            lg:px-10
           "
         >
 
-          {/* PEQUEÑA LÍNEA DECORATIVA */}
-
-          <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-[#C6922F]" />
-
-
-          {/* ETIQUETA */}
-
-          <p
+          <div
             className="
-              mb-2
-              text-[9px]
-              font-bold
-              tracking-[0.25em]
-              text-[#C6922F]
+              max-w-[620px]
+              text-white
+              sm:max-w-[650px]
             "
           >
-            ESTANTERÍA SEVILLA
-          </p>
 
+            {/* ==================================================
+                PEQUEÑA LÍNEA
+            =================================================== */}
 
-          {/* TÍTULO */}
-
-          <h1
-            className="
-              mx-auto
-              max-w-[300px]
-              font-serif
-              text-[28px]
-              font-bold
-              leading-[1.04]
-              text-[#111111]
-            "
-          >
-            Equipamiento
-            <br />
-            comercial
-            <br />
-
-            <span className="text-[#C6922F]">
-              para tiendas y negocios
-            </span>
-          </h1>
-
-
-          {/* DESCRIPCIÓN */}
-
-          <p
-            className="
-              mx-auto
-              mt-4
-              max-w-[300px]
-              text-[12px]
-              leading-[1.65]
-              text-[#475569]
-            "
-          >
-            Descubre soluciones profesionales para
-            comercios, supermercados, tiendas de ropa,
-            ferreterías, almacenes y cualquier tipo
-            de negocio.
-          </p>
-
-
-          {/* BOTONES */}
-
-          <div className="mx-auto mt-5 flex max-w-[300px] flex-col gap-2.5">
-
-            {/* CATÁLOGO */}
-
-            <Link
-              href="/catalogo"
+            <div
               className="
-                flex
-                h-11
-                items-center
-                justify-center
-                rounded-xl
+                mb-6
+                h-1
+                w-12
+                rounded-full
                 bg-[#C6922F]
-                text-[13px]
-                font-semibold
+                sm:w-16
+              "
+            />
+
+
+            {/* ==================================================
+                ETIQUETA
+            =================================================== */}
+
+            <p
+              className="
+                mb-4
+                text-[10px]
+                font-bold
+                tracking-[0.35em]
+                text-[#E0AD4B]
+                sm:text-xs
+              "
+            >
+              ESTANTERÍA SEVILLA
+            </p>
+
+
+            {/* ==================================================
+                TÍTULO
+            =================================================== */}
+
+            <h1
+              className="
+                font-serif
+                text-[42px]
+                font-bold
+                leading-[0.98]
+                tracking-[-0.02em]
                 text-white
-                shadow-sm
-                transition-all
-                duration-300
-                hover:bg-[#A8791F]
-                active:scale-[0.98]
+                sm:text-5xl
+                md:text-6xl
+                lg:text-7xl
+                xl:text-[76px]
               "
             >
-              Ver catálogo
-            </Link>
+              Equipamiento
+              <br />
+
+              comercial
+            </h1>
 
 
-            {/* PRESUPUESTO */}
+            {/* ==================================================
+                SUBTÍTULO
+            =================================================== */}
 
-            <Link
-              href="/presupuesto"
+            <h2
               className="
+                mt-2
+                font-serif
+                text-[30px]
+                font-bold
+                leading-tight
+                text-[#D9A13A]
+                sm:text-4xl
+                md:text-5xl
+                lg:text-6xl
+              "
+            >
+              para tiendas y negocios
+            </h2>
+
+
+            {/* ==================================================
+                DESCRIPCIÓN
+            =================================================== */}
+
+            <p
+              className="
+                mt-6
+                max-w-[560px]
+                text-sm
+                leading-6
+                text-white/85
+                sm:text-base
+                sm:leading-7
+                lg:text-lg
+                lg:leading-8
+              "
+            >
+              Diseñamos y fabricamos soluciones profesionales
+              para comercios, supermercados, tiendas de ropa,
+              ferreterías, almacenes y todo tipo de negocios.
+            </p>
+
+
+            {/* ==================================================
+                BOTONES
+            =================================================== */}
+
+            <div
+              className="
+                mt-8
                 flex
-                h-11
-                items-center
-                justify-center
-                rounded-xl
-                border
-                border-[#D7D7D7]
-                bg-white
-                text-[13px]
-                font-semibold
-                text-[#111111]
-                transition-all
-                duration-300
-                hover:border-[#C6922F]
-                hover:text-[#C6922F]
-                active:scale-[0.98]
+                flex-col
+                gap-3
+                sm:flex-row
               "
             >
-              Solicitar presupuesto
-            </Link>
 
-          </div>
+              {/* CATÁLOGO */}
 
-        </div>
-
-
-        {/* ESPACIO INFERIOR */}
-
-        <div className="h-8" />
-
-      </div>
-
-
-      {/* =====================================================
-          TABLET
-      ====================================================== */}
-
-      <div className="hidden md:block lg:hidden">
-
-        <div className="relative h-[600px] w-full overflow-hidden">
-
-          <Image
-            src="/images/hero/hero.jpg"
-            alt="Estantería comercial para tiendas"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-            style={{
-              transform: `scale(${imageScale}) translateY(${imageMove}px)`,
-              transition: "transform 0.15s linear",
-            }}
-          />
-
-          <div className="absolute inset-0 bg-black/10" />
-
-
-          <div className="absolute bottom-8 left-8 right-8">
-
-            <div
-              className="
-                max-w-[540px]
-                rounded-[30px]
-                bg-white/95
-                p-8
-                shadow-2xl
-                backdrop-blur-sm
-              "
-              style={{
-                transform: `translateY(${contentMove}px)`,
-                opacity: contentOpacity,
-              }}
-            >
-
-              <p className="mb-3 text-xs font-semibold tracking-[0.25em] text-[#C6922F]">
-                ESTANTERÍA SEVILLA
-              </p>
-
-
-              <h1 className="font-serif text-4xl font-bold leading-[1.05] text-[#111111]">
-
-                Equipamiento comercial{" "}
-
-                <span className="text-[#C6922F]">
-                  para tiendas y negocios
-                </span>
-
-              </h1>
-
-
-              <p className="mt-4 text-base leading-7 text-[#475569]">
-
-                Soluciones profesionales para comercios,
-                supermercados, tiendas y negocios.
-
-              </p>
-
-
-              <div className="mt-6 flex gap-3">
-
-                <Link
-                  href="/catalogo"
-                  className="
-                    flex-1
-                    rounded-xl
-                    bg-[#C6922F]
-                    px-6
-                    py-3
-                    text-center
-                    font-semibold
-                    text-white
-                    transition-all
-                    duration-300
-                    hover:-translate-y-0.5
-                    hover:bg-[#A8791F]
-                  "
-                >
-                  Ver catálogo
-                </Link>
-
-
-                <Link
-                  href="/presupuesto"
-                  className="
-                    flex-1
-                    rounded-xl
-                    border
-                    border-gray-300
-                    bg-white
-                    px-6
-                    py-3
-                    text-center
-                    font-semibold
-                    text-[#111111]
-                    transition-all
-                    duration-300
-                    hover:-translate-y-0.5
-                    hover:border-[#C6922F]
-                    hover:text-[#C6922F]
-                  "
-                >
-                  Solicitar presupuesto
-                </Link>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      {/* =====================================================
-          ORDENADOR
-      ====================================================== */}
-
-      <div className="hidden lg:block">
-
-        <div className="relative min-h-[680px] w-full overflow-hidden">
-
-          <Image
-            src="/images/hero/hero.jpg"
-            alt="Estantería comercial para tiendas y negocios"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-            style={{
-              transform: `scale(${imageScale}) translateY(${imageMove}px)`,
-              transition: "transform 0.15s linear",
-            }}
-          />
-
-
-          {/* CAPA OSCURA */}
-
-          <div className="absolute inset-0 bg-black/10" />
-
-
-          {/* CONTENIDO */}
-
-          <div className="relative z-10 mx-auto flex min-h-[680px] max-w-7xl items-center px-8">
-
-            <div
-              className="
-                max-w-[570px]
-                rounded-[35px]
-                bg-white/95
-                p-10
-                shadow-2xl
-                backdrop-blur-sm
-              "
-              style={{
-                transform: `translateY(${contentMove}px)`,
-                opacity: contentOpacity,
-              }}
-            >
-
-              {/* ETIQUETA */}
-
-              <p className="mb-4 text-xs font-semibold tracking-[0.3em] text-[#C6922F]">
-                ESTANTERÍA SEVILLA
-              </p>
-
-
-              {/* TÍTULO */}
-
-              <h1
+              <Link
+                href="/catalogo"
                 className="
-                  font-serif
-                  text-5xl
-                  font-bold
-                  leading-[1.05]
-                  text-[#111111]
-                  xl:text-6xl
+                  inline-flex
+                  h-12
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-[#C6922F]
+                  px-8
+                  text-sm
+                  font-semibold
+                  text-white
+                  shadow-lg
+                  shadow-black/20
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  hover:bg-[#A8791F]
+                  hover:shadow-xl
+                  active:scale-[0.98]
                 "
               >
-                Equipamiento
-                <br />
-                comercial
-                <br />
-
-                <span className="text-[#C6922F]">
-                  para tiendas y negocios
-                </span>
-              </h1>
+                Ver catálogo
+              </Link>
 
 
-              {/* DESCRIPCIÓN */}
+              {/* PRESUPUESTO */}
 
-              <p className="mt-6 max-w-lg text-lg leading-8 text-[#334155]">
-
-                Descubre soluciones profesionales para
-                comercios, supermercados, tiendas de ropa,
-                ferreterías, almacenes y cualquier tipo de negocio.
-
-              </p>
-
-
-              {/* BOTONES */}
-
-              <div className="mt-8 flex gap-4">
-
-                <Link
-                  href="/catalogo"
-                  className="
-                    rounded-xl
-                    bg-[#C6922F]
-                    px-10
-                    py-4
-                    font-semibold
-                    text-white
-                    transition-all
-                    duration-300
-                    hover:-translate-y-0.5
-                    hover:bg-[#A8791F]
-                  "
-                >
-                  Ver catálogo
-                </Link>
-
-
-                <Link
-                  href="/presupuesto"
-                  className="
-                    rounded-xl
-                    border
-                    border-gray-300
-                    bg-white
-                    px-10
-                    py-4
-                    font-semibold
-                    text-[#111111]
-                    transition-all
-                    duration-300
-                    hover:-translate-y-0.5
-                    hover:border-[#C6922F]
-                    hover:text-[#C6922F]
-                  "
-                >
-                  Solicitar presupuesto
-                </Link>
-
-              </div>
+              <Link
+                href="/presupuesto"
+                className="
+                  inline-flex
+                  h-12
+                  items-center
+                  justify-center
+                  rounded-xl
+                  border
+                  border-white/60
+                  bg-white/10
+                  px-8
+                  text-sm
+                  font-semibold
+                  text-white
+                  backdrop-blur-md
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  hover:bg-white
+                  hover:text-[#111111]
+                  active:scale-[0.98]
+                "
+              >
+                Solicitar presupuesto
+              </Link>
 
             </div>
 
           </div>
+
+        </div>
+
+
+        {/* ======================================================
+            INDICADORES
+        ======================================================= */}
+
+        <div
+          className="
+            absolute
+            bottom-8
+            left-1/2
+            z-[20]
+            flex
+            -translate-x-1/2
+            items-center
+            gap-2
+          "
+        >
+
+          {heroImages.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => setCurrentImage(index)}
+              aria-label={`Mostrar imagen ${index + 1}`}
+              className={`
+                h-2
+                rounded-full
+                transition-all
+                duration-500
+                ${
+                  index === currentImage
+                    ? "w-10 bg-[#C6922F]"
+                    : "w-2 bg-white/60 hover:bg-white"
+                }
+              `}
+            />
+          ))}
+
+        </div>
+
+
+        {/* ======================================================
+            NÚMERO DE SLIDE
+        ======================================================= */}
+
+        <div
+          className="
+            absolute
+            bottom-7
+            right-6
+            z-[20]
+            hidden
+            items-center
+            gap-3
+            text-white
+            sm:flex
+            lg:right-10
+          "
+        >
+
+          <span className="text-sm font-semibold">
+            {String(currentImage + 1).padStart(2, "0")}
+          </span>
+
+          <span className="h-px w-8 bg-white/50" />
+
+          <span className="text-xs text-white/60">
+            {String(heroImages.length).padStart(2, "0")}
+          </span>
 
         </div>
 
