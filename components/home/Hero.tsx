@@ -60,11 +60,13 @@ export default function Hero() {
         <div className="relative z-30 mx-auto flex h-full max-w-7xl items-center px-6 sm:px-8 lg:px-10">
           <div className="max-w-[600px] text-white sm:max-w-[650px]">
 
-            <div className="mb-5 h-1 w-12 rounded-full bg-[#C6922F] sm:w-16" />
+            <div className="mb-5 h-1 w-12 rounded-full bg-[#C6922F] sm:w-0" />
 
-            <p className="mb-4 text-[10px] font-bold tracking-[0.35em] text-[#E0AD4B] sm:text-xs">
+            <p className="mb-4 text-[10px] font-bold tracking-[0.35em] text-[#fdffff] sm:text-xs">
               ESTANTERÍA SEVILLA
             </p>
+
+            <div className="mb-5 h-1 w-12 rounded-full bg-[#C6922F] sm:w-50" />
 
             <h1 className="font-serif text-[40px] font-bold leading-[1] tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[74px]">
               Equipamiento
@@ -77,7 +79,7 @@ export default function Hero() {
             </h2>
 
             <p className="mt-6 max-w-[550px] text-sm leading-6 text-white drop-shadow-[0_2px_5px_rgba(0,0,0,0.4)] sm:text-base sm:leading-7 lg:text-lg lg:leading-8">
-              Diseñamos y fabricamos soluciones profesionales
+              Soluciones profesionales
               para comercios, supermercados, tiendas de ropa,
               ferreterías, almacenes y todo tipo de negocios.
             </p>
@@ -85,14 +87,14 @@ export default function Hero() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/catalogo"
-                className="inline-flex h-12 items-center justify-center rounded-xl bg-[#C6922F] px-8 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-[#A8791F] active:scale-[0.98]"
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-[#C6922F] px-10 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-[#A8791F] active:scale-[0.99]"
               >
                 Ver catálogo
               </Link>
 
               <Link
                 href="/presupuesto"
-                className="inline-flex h-12 items-center justify-center rounded-xl border border-white/70 bg-white/10 px-8 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:text-[#111111] active:scale-[0.98]"
+                className="inline-flex h-12 items-center justify-center rounded-xl border border-white/70 bg-white/10 px-10 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:text-[#111111] active:scale-[0.99]"
               >
                 Solicitar presupuesto
               </Link>
