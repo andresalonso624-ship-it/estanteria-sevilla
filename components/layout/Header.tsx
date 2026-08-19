@@ -152,7 +152,7 @@ export default function Header() {
             justify-between
             px-4
             sm:px-6
-            lg:h-24
+            lg:h-20
             lg:px-8
           "
         >
@@ -169,19 +169,19 @@ export default function Header() {
             <Image
               src="/images/logo/logo.png"
               alt="Estantería Sevilla"
-              width={240}
-              height={90}
+              width={150}
+              height={55}
               priority
               className="
                 h-auto
-                w-[170px]
+                w-[125px]
                 rounded-md
                 bg-white
                 px-2
                 py-1
                 object-contain
-                sm:w-[190px]
-                lg:w-[220px]
+                sm:w-[145px]
+                lg:w-[150px]
                 lg:bg-transparent
                 lg:px-0
                 lg:py-0
