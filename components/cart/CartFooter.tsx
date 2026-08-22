@@ -20,20 +20,6 @@ export default function CartFooter({
     0
   );
 
-  /**
-   * Shopify está devolviendo el checkout con nuestro dominio
-   * personalizado, que ahora apunta a Vercel.
-   *
-   * Para finalizar la compra utilizamos directamente el dominio
-   * interno de Shopify.
-   */
-  const shopifyCheckoutUrl = checkoutUrl
-    ? checkoutUrl.replace(
-        /^https?:\/\/estanteriasevilla\.com/i,
-        "https://estanteriasevilla.myshopify.com"
-      )
-    : "#";
-
   return (
     <div className="border-t border-gray-200 bg-white p-5 sm:p-6">
 
@@ -61,7 +47,7 @@ export default function CartFooter({
 
       {/* FINALIZAR COMPRA */}
       <a
-        href={shopifyCheckoutUrl}
+        href={checkoutUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="flex h-14 w-full items-center justify-center rounded-xl bg-black text-base font-semibold text-white transition duration-300 hover:bg-[#C6922F]"
