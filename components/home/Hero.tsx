@@ -162,10 +162,10 @@ export default function Hero() {
               className="
                 mb-4
                 h-1
-                w-12
+                w-0
                 rounded-full
                 bg-[#C6922F]
-                sm:w-14
+                sm:w-0
               "
             />
 
@@ -174,16 +174,26 @@ export default function Hero() {
             <p
               className="
                 mb-3
-                text-[10px]
+                text-[12px]
                 font-bold
                 tracking-[0.32em]
-                text-[#E4B34F]
+                text white
                 sm:text-xs
               "
             >
               ESTANTERÍA SEVILLA
             </p>
 
+            <div
+              className="
+                mb-8
+                h-1
+                w-50
+                rounded-full
+                bg-[#C6922F]
+                sm:w-50
+              "
+            />
             {/* =================================================
                 TÍTULO
             ================================================== */}
@@ -245,9 +255,7 @@ export default function Hero() {
                 lg:leading-7
               "
             >
-              Diseñamos y fabricamos soluciones profesionales
-              para comercios, supermercados, tiendas de ropa,
-              ferreterías, almacenes y todo tipo de negocios.
+             Equipamiento comercial diseñado para ayudarte a organizar, mostrar y aprovechar mejor tu espacio.
             </p>
 
             {/* =================================================

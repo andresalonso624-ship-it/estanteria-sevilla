@@ -174,14 +174,14 @@ export default function Header() {
               priority
               className="
                 h-auto
-                w-[125px]
+                w-[200px]
                 rounded-md
                 bg-white
                 px-2
                 py-1
                 object-contain
-                sm:w-[145px]
-                lg:w-[150px]
+                sm:w-[155px]
+                lg:w-[200px]
                 lg:bg-transparent
                 lg:px-0
                 lg:py-0
