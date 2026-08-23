@@ -98,6 +98,8 @@ export default function RootLayout({
         <CartProvider>
           {children}
         </CartProvider>
+
+        <Analytics />
       </body>
     </html>
   );
