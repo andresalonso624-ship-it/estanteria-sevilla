@@ -24,6 +24,11 @@ export async function getProducts() {
             handle
             description
 
+            seo {
+              title
+              description
+            }
+
             featuredImage {
               url
               altText
@@ -74,7 +79,9 @@ export async function getProducts() {
 
     const data = await shopifyFetch(query);
 
-    allProducts.push(...data.products.nodes);
+    allProducts.push(
+      ...data.products.nodes
+    );
 
     hasNextPage =
       data.products.pageInfo.hasNextPage;
@@ -85,6 +92,7 @@ export async function getProducts() {
 
   return allProducts;
 }
+
 
 /* =========================================================
    OBTENER TODAS LAS CATEGORÍAS / COLECCIONES
@@ -146,25 +154,6 @@ export async function getCollections() {
   return allCollections;
 }
 
-/* =========================================================
-   NORMALIZAR TEXTO
-   Sirve para comparar:
-
-   PERCHAS
-   perchas
-   Perchas
-   perchas-para-tiendas
-
-========================================================= */
-
-function normalizeText(value: string) {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
 
 /* =========================================================
    OBTENER UNA COLECCIÓN POR HANDLE
@@ -176,12 +165,7 @@ export async function getCollectionByHandle(
   const safeHandle =
     JSON.stringify(handle);
 
-  /* =======================================================
-     1. PRIMER INTENTO:
-     HANDLE EXACTO DE SHOPIFY
-  ======================================================= */
-
-  const directQuery = `
+  const query = `
     {
       collection(handle: ${safeHandle}) {
         id
@@ -207,6 +191,11 @@ export async function getCollectionByHandle(
             handle
             description
 
+            seo {
+              title
+              description
+            }
+
             featuredImage {
               url
               altText
@@ -256,156 +245,81 @@ export async function getCollectionByHandle(
     }
   `;
 
-  const directData =
-    await shopifyFetch(directQuery);
+  const data =
+    await shopifyFetch(query);
 
-  /* =======================================================
-     SI EXISTE EL HANDLE EXACTO
-  ======================================================= */
+  return data.collection;
+}
 
-  if (directData.collection) {
-    return directData.collection;
-  }
 
-  /* =======================================================
-     2. SI NO EXISTE:
-     BUSCAR ENTRE TODAS LAS COLECCIONES
-  ======================================================= */
+/* =========================================================
+   OBTENER UN PRODUCTO POR HANDLE
+========================================================= */
 
-  const collections =
-    await getCollections();
+export async function getProductByHandle(
+  handle: string
+) {
+  const safeHandle =
+    JSON.stringify(handle);
 
-  const normalizedHandle =
-    normalizeText(handle);
-
-  /* =======================================================
-     BUSCAR POR HANDLE NORMALIZADO
-  ======================================================= */
-
-  let matchedCollection =
-    collections.find(
-      (collection: any) =>
-        normalizeText(collection.handle) ===
-        normalizedHandle
-    );
-
-  /* =======================================================
-     BUSCAR POR TÍTULO
-
-     Ejemplo:
-
-     URL:
-     /catalogo/perchas
-
-     Shopify:
-     PERCHAS
-  ======================================================= */
-
-  if (!matchedCollection) {
-    matchedCollection =
-      collections.find(
-        (collection: any) =>
-          normalizeText(collection.title) ===
-          normalizedHandle
-      );
-  }
-
-  /* =======================================================
-     3. SI NO ENCONTRAMOS NADA
-  ======================================================= */
-
-  if (!matchedCollection) {
-    return null;
-  }
-
-  /* =======================================================
-     4. OBTENER LA COLECCIÓN REAL DE SHOPIFY
-        USANDO SU HANDLE REAL
-  ======================================================= */
-
-  const realHandle =
-    matchedCollection.handle;
-
-  const realSafeHandle =
-    JSON.stringify(realHandle);
-
-  const collectionQuery = `
+  const query = `
     {
-      collection(handle: ${realSafeHandle}) {
+      product(handle: ${safeHandle}) {
         id
         title
         handle
         description
         descriptionHtml
 
-        image {
-          url
-          altText
-        }
-
         seo {
           title
           description
         }
 
-        products(first: 50) {
+        featuredImage {
+          url
+          altText
+        }
+
+        images(first: 20) {
+          nodes {
+            url
+            altText
+          }
+        }
+
+        variants(first: 50) {
+          nodes {
+            id
+            title
+            sku
+            availableForSale
+
+            selectedOptions {
+              name
+              value
+            }
+
+            price {
+              amount
+              currencyCode
+            }
+          }
+        }
+
+        collections(first: 20) {
           nodes {
             id
             title
             handle
-            description
-
-            featuredImage {
-              url
-              altText
-            }
-
-            images(first: 10) {
-              nodes {
-                url
-                altText
-              }
-            }
-
-            variants(first: 20) {
-              nodes {
-                id
-                title
-                sku
-                availableForSale
-
-                selectedOptions {
-                  name
-                  value
-                }
-
-                price {
-                  amount
-                  currencyCode
-                }
-              }
-            }
-
-            collections(first: 20) {
-              nodes {
-                id
-                title
-                handle
-              }
-            }
-          }
-
-          pageInfo {
-            hasNextPage
-            endCursor
           }
         }
       }
     }
   `;
 
-  const collectionData =
-    await shopifyFetch(collectionQuery);
+  const data =
+    await shopifyFetch(query);
 
-  return collectionData.collection;
+  return data.product;
 }
