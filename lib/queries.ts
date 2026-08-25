@@ -26,11 +26,13 @@ export async function getProducts() {
 
             featuredImage {
               url
+              altText
             }
 
             images(first: 10) {
               nodes {
                 url
+                altText
               }
             }
 
@@ -48,6 +50,7 @@ export async function getProducts() {
 
                 price {
                   amount
+                  currencyCode
                 }
               }
             }
@@ -71,20 +74,14 @@ export async function getProducts() {
 
     const data = await shopifyFetch(query);
 
-    allProducts.push(
-      ...data.products.nodes
-    );
+    allProducts.push(...data.products.nodes);
 
-    hasNextPage =
-      data.products.pageInfo.hasNextPage;
-
-    cursor =
-      data.products.pageInfo.endCursor;
+    hasNextPage = data.products.pageInfo.hasNextPage;
+    cursor = data.products.pageInfo.endCursor;
   }
 
   return allProducts;
 }
-
 
 /* =========================================================
    OBTENER TODAS LAS CATEGORÍAS / COLECCIONES
@@ -108,6 +105,17 @@ export async function getCollections() {
             id
             title
             handle
+            description
+
+            image {
+              url
+              altText
+            }
+
+            seo {
+              title
+              description
+            }
           }
 
           pageInfo {
@@ -118,19 +126,100 @@ export async function getCollections() {
       }
     `;
 
-    const data =
-      await shopifyFetch(query);
+    const data = await shopifyFetch(query);
 
-    allCollections.push(
-      ...data.collections.nodes
-    );
+    allCollections.push(...data.collections.nodes);
 
-    hasNextPage =
-      data.collections.pageInfo.hasNextPage;
-
-    cursor =
-      data.collections.pageInfo.endCursor;
+    hasNextPage = data.collections.pageInfo.hasNextPage;
+    cursor = data.collections.pageInfo.endCursor;
   }
 
   return allCollections;
+}
+
+/* =========================================================
+   OBTENER UNA COLECCIÓN POR HANDLE
+========================================================= */
+
+export async function getCollectionByHandle(handle: string) {
+  const safeHandle = JSON.stringify(handle);
+
+  const query = `
+    {
+      collection(handle: ${safeHandle}) {
+        id
+        title
+        handle
+        description
+        descriptionHtml
+
+        image {
+          url
+          altText
+        }
+
+        seo {
+          title
+          description
+        }
+
+        products(first: 50) {
+          nodes {
+            id
+            title
+            handle
+            description
+
+            featuredImage {
+              url
+              altText
+            }
+
+            images(first: 10) {
+              nodes {
+                url
+                altText
+              }
+            }
+
+            variants(first: 20) {
+              nodes {
+                id
+                title
+                sku
+                availableForSale
+
+                selectedOptions {
+                  name
+                  value
+                }
+
+                price {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+
+            collections(first: 20) {
+              nodes {
+                id
+                title
+                handle
+              }
+            }
+          }
+
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    }
+  `;
+
+  const data = await shopifyFetch(query);
+
+  return data.collection;
 }

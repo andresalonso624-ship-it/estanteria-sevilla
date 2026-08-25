@@ -3,11 +3,12 @@ import Footer from "@/components/layout/Footer";
 import CatalogProducts from "@/components/catalog/CatalogProducts";
 
 import {
-  getProducts,
+  getCollectionByHandle,
   getCollections,
 } from "@/lib/queries";
 
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 type Props = {
   params: Promise<{
@@ -15,59 +16,119 @@ type Props = {
   }>;
 };
 
+/* =========================================================
+   SEO DINÁMICO DE CADA CATEGORÍA
+========================================================= */
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const { handle } = await params;
+
+  const collection = await getCollectionByHandle(handle);
+
+  if (!collection) {
+    return {
+      title: "Categoría no encontrada | Estantería Sevilla",
+      description:
+        "La categoría que buscas no está disponible.",
+    };
+  }
+
+  const title =
+    collection.seo?.title ||
+    `${collection.title} para tiendas y comercios | Estantería Sevilla`;
+
+  const description =
+    collection.seo?.description ||
+    collection.description ||
+    `Descubre nuestra selección de ${collection.title.toLowerCase()} para tiendas, comercios y negocios.`;
+
+  return {
+    title,
+    description,
+
+    alternates: {
+      canonical: `/catalogo/${collection.handle}`,
+    },
+
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `/catalogo/${collection.handle}`,
+      siteName: "Estantería Sevilla",
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
+
+/* =========================================================
+   PÁGINA DE CATEGORÍA
+========================================================= */
+
 export default async function CatalogoCategoriaPage({
   params,
 }: Props) {
   const { handle } = await params;
 
-  /* =====================================================
-     OBTENER PRODUCTOS
-  ===================================================== */
+  /* =======================================================
+     OBTENER LA COLECCIÓN DIRECTAMENTE DE SHOPIFY
+  ======================================================= */
 
-  const products = await getProducts();
+  const collection = await getCollectionByHandle(handle);
 
-  /* =====================================================
-     OBTENER COLECCIONES
-  ===================================================== */
-
-  const collections = await getCollections();
-
-  /* =====================================================
-     BUSCAR LA COLECCIÓN
-  ===================================================== */
-
-  const collection = collections.find(
-    (item: any) => item.handle === handle
-  );
-
-  /* =====================================================
-     SI NO EXISTE LA CATEGORÍA
-  ===================================================== */
+  /* =======================================================
+     SI NO EXISTE LA COLECCIÓN
+  ======================================================= */
 
   if (!collection) {
     notFound();
   }
 
-  /* =====================================================
-     FILTRAR PRODUCTOS DE ESTA CATEGORÍA
-  ===================================================== */
+  /* =======================================================
+     OBTENER TODAS LAS COLECCIONES
+     PARA EL FILTRO / MENÚ DEL CATÁLOGO
+  ======================================================= */
 
-  const categoryProducts = products.filter(
-    (product: any) =>
-      product.collections?.nodes?.some(
-        (item: any) => item.handle === handle
-      )
-  );
+  const collections = await getCollections();
+
+  /* =======================================================
+     PRODUCTOS DE ESTA CATEGORÍA
+  ======================================================= */
+
+  const categoryProducts =
+    collection.products?.nodes || [];
+
+  /* =======================================================
+     DESCRIPCIÓN
+  ======================================================= */
+
+  const description =
+    collection.description ||
+    `Descubre nuestros productos de ${collection.title.toLowerCase()} para tiendas y comercios.`;
 
   return (
     <>
+      {/* =====================================================
+          HEADER
+      ====================================================== */}
+
       <Header />
+
+      {/* =====================================================
+          CONTENIDO
+      ====================================================== */}
 
       <main className="min-h-screen bg-[#FCFAF7]">
 
-        {/* =================================================
+        {/* ===================================================
             CABECERA DE CATEGORÍA
-        ================================================== */}
+        ==================================================== */}
 
         <section
           className="
@@ -75,9 +136,13 @@ export default async function CatalogoCategoriaPage({
             pb-10
             pt-10
             text-center
+            sm:pb-12
             sm:pt-14
           "
         >
+
+          {/* ETIQUETA */}
+
           <p
             className="
               mb-3
@@ -91,6 +156,8 @@ export default async function CatalogoCategoriaPage({
             Estantería Sevilla
           </p>
 
+          {/* TÍTULO */}
+
           <h1
             className="
               text-4xl
@@ -103,6 +170,8 @@ export default async function CatalogoCategoriaPage({
             {collection.title}
           </h1>
 
+          {/* LÍNEA */}
+
           <div
             className="
               mx-auto
@@ -114,39 +183,51 @@ export default async function CatalogoCategoriaPage({
             "
           />
 
+          {/* DESCRIPCIÓN */}
+
           <p
             className="
               mx-auto
               mt-5
-              max-w-2xl
+              max-w-3xl
               text-base
+              leading-7
               text-gray-600
               sm:text-lg
+              sm:leading-8
             "
           >
-            Descubre nuestros productos de{" "}
-            {collection.title.toLowerCase()}.
+            {description}
           </p>
+
         </section>
 
-        {/* =================================================
+        {/* ===================================================
             PRODUCTOS
-        ================================================== */}
+        ==================================================== */}
 
         <section
           className="
             mx-auto
             max-w-7xl
+            px-4
             pb-24
+            sm:px-6
           "
         >
+
           <CatalogProducts
             products={categoryProducts}
             collections={collections}
           />
+
         </section>
 
       </main>
+
+      {/* =====================================================
+          FOOTER
+      ====================================================== */}
 
       <Footer />
     </>
