@@ -13,6 +13,37 @@ type Props = {
 };
 
 /* =========================================================
+   CONFIGURACIÓN SEO
+========================================================= */
+
+const BASE_URL = "https://estanteriasevilla.com";
+
+/* =========================================================
+   LIMPIAR TEXTO PARA SEO
+========================================================= */
+
+function cleanText(text: string = "") {
+  return text
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/* =========================================================
+   LIMITAR DESCRIPCIÓN
+========================================================= */
+
+function limitDescription(text: string, max = 155) {
+  const clean = cleanText(text);
+
+  if (clean.length <= max) {
+    return clean;
+  }
+
+  return `${clean.substring(0, max - 3).trim()}...`;
+}
+
+/* =========================================================
    SEO DEL PRODUCTO
 ========================================================= */
 
@@ -28,48 +59,82 @@ export async function generateMetadata({
       title: "Producto no encontrado | Estantería Sevilla",
       description:
         "El producto que buscas no está disponible.",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
-  const title =
-    product.seo?.title ||
-    `${product.title} | Estantería Sevilla`;
+  const fallbackTitle =
+    `${product.title} para tiendas | Estantería Sevilla`;
 
-  const description =
+  const title = (
+    product.seo?.title ||
+    fallbackTitle
+  ).trim();
+
+  const sourceDescription =
     product.seo?.description ||
     product.description ||
-    `Compra ${product.title.toLowerCase()} para tiendas y comercios en España.`;
+    `Compra ${product.title} para tiendas y comercios en España.`;
+
+  const description = limitDescription(
+    sourceDescription,
+    155
+  );
+
+  const canonical =
+    `${BASE_URL}/producto/${product.handle}`;
+
+  const image =
+    product.featuredImage?.url ||
+    product.images?.nodes?.[0]?.url;
 
   return {
     title,
     description,
 
     alternates: {
-      canonical: `https://estanteriasevilla.com/producto/${product.handle}`,
+      canonical,
+    },
+
+    robots: {
+      index: true,
+      follow: true,
     },
 
     openGraph: {
       title,
       description,
       type: "website",
-      url: `https://estanteriasevilla.com/producto/${product.handle}`,
+      url: canonical,
       siteName: "Estantería Sevilla",
 
-      images: product.featuredImage?.url
-        ? [
-            {
-              url: product.featuredImage.url,
-              alt:
-                product.featuredImage.altText ||
-                product.title,
-            },
-          ]
-        : undefined,
+      ...(image
+        ? {
+            images: [
+              {
+                url: image,
+                alt:
+                  product.featuredImage?.altText ||
+                  product.title,
+              },
+            ],
+          }
+        : {}),
     },
 
-    robots: {
-      index: true,
-      follow: true,
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+
+      ...(image
+        ? {
+            images: [image],
+          }
+        : {}),
     },
   };
 }
@@ -89,27 +154,136 @@ export default async function ProductoPage({
     notFound();
   }
 
+  /* =======================================================
+     IMAGEN PRINCIPAL
+  ======================================================= */
+
   const image =
     product.featuredImage?.url ||
     product.images?.nodes?.[0]?.url ||
     null;
 
+  /* =======================================================
+     DESCRIPCIÓN
+  ======================================================= */
+
   const description =
     product.description ||
     `Producto para tiendas y comercios: ${product.title}.`;
 
+  /* =======================================================
+     PRIMERA VARIANTE
+  ======================================================= */
+
+  const variant =
+    product.variants?.nodes?.[0] || null;
+
   const price =
-    product.variants?.nodes?.[0]?.price?.amount || null;
+    variant?.price?.amount || null;
 
   const currency =
-    product.variants?.nodes?.[0]?.price?.currencyCode ||
-    "EUR";
+    variant?.price?.currencyCode || "EUR";
+
+  const availableForSale =
+    variant?.availableForSale ?? true;
+
+  /* =======================================================
+     URL CANÓNICA
+  ======================================================= */
+
+  const canonical =
+    `${BASE_URL}/producto/${product.handle}`;
+
+  /* =======================================================
+     CATEGORÍAS
+  ======================================================= */
+
+  const collections =
+    product.collections?.nodes || [];
+
+  /* =======================================================
+     DATOS ESTRUCTURADOS PRODUCT
+  ======================================================= */
+
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+
+    name: product.title,
+
+    description: cleanText(description),
+
+    url: canonical,
+
+    ...(image
+      ? {
+          image: [image],
+        }
+      : {}),
+
+    brand: {
+      "@type": "Brand",
+      name: "Estantería Sevilla",
+    },
+
+    ...(variant?.sku
+      ? {
+          sku: variant.sku,
+        }
+      : {}),
+
+    ...(price
+      ? {
+          offers: {
+            "@type": "Offer",
+
+            url: canonical,
+
+            priceCurrency: currency,
+
+            price: price,
+
+            availability: availableForSale
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+
+            seller: {
+              "@type": "Organization",
+              name: "Estantería Sevilla",
+              url: BASE_URL,
+            },
+          },
+        }
+      : {}),
+  };
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
     <>
       <Header />
 
       <main className="min-h-screen bg-[#FCFAF7]">
+
+        {/* =================================================
+            DATOS ESTRUCTURADOS PARA GOOGLE
+        ================================================== */}
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(productSchema).replace(
+              /</g,
+              "\\u003c"
+            ),
+          }}
+        />
+
+        {/* =================================================
+            PRODUCTO
+        ================================================== */}
 
         <section className="mx-auto max-w-7xl px-6 py-16">
 
@@ -157,6 +331,8 @@ export default async function ProductoPage({
 
             <div>
 
+              {/* MARCA */}
+
               <p
                 className="
                   mb-3
@@ -170,6 +346,8 @@ export default async function ProductoPage({
                 Estantería Sevilla
               </p>
 
+              {/* TÍTULO */}
+
               <h1
                 className="
                   text-4xl
@@ -181,6 +359,8 @@ export default async function ProductoPage({
                 {product.title}
               </h1>
 
+              {/* LÍNEA */}
+
               <div
                 className="
                   mt-5
@@ -191,6 +371,8 @@ export default async function ProductoPage({
                 "
               />
 
+              {/* PRECIO */}
+
               {price && (
                 <p
                   className="
@@ -200,12 +382,17 @@ export default async function ProductoPage({
                     text-[#111111]
                   "
                 >
-                  {Number(price).toLocaleString("es-ES", {
-                    style: "currency",
-                    currency,
-                  })}
+                  {Number(price).toLocaleString(
+                    "es-ES",
+                    {
+                      style: "currency",
+                      currency,
+                    }
+                  )}
                 </p>
               )}
+
+              {/* DESCRIPCIÓN */}
 
               <div
                 className="
@@ -223,7 +410,7 @@ export default async function ProductoPage({
                   CATEGORÍAS
               ================================================== */}
 
-              {product.collections?.nodes?.length > 0 && (
+              {collections.length > 0 && (
                 <div className="mt-8">
 
                   <p className="mb-3 font-semibold text-[#111111]">
@@ -232,7 +419,7 @@ export default async function ProductoPage({
 
                   <div className="flex flex-wrap gap-2">
 
-                    {product.collections.nodes.map(
+                    {collections.map(
                       (collection: any) => (
                         <a
                           key={collection.id}
