@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://estanteriasevilla.com"),
+  verification: {
+  google: "FFEOuE97ebL1djNr4JrTRsKZsd1rwrQD8yFiBNPF3Yo",
+},
 
   title: {
     default:
