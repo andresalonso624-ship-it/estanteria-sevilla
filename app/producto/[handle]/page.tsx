@@ -12,7 +12,7 @@ type Props = {
   }>;
 };
 
-const BASE_URL = "https://estanteriasevilla.com";
+const BASE_URL = "https://www.estanteriasevilla.com";
 
 function cleanText(text: string = ""): string {
   return text
