@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { Check } from "lucide-react";
 import ProductPurchase from "@/components/catalog/ProductPurchase";
@@ -355,9 +356,9 @@ export default function ProductGalleryAndPurchase({
         </div>
       </div>
 
-      {lightboxOpen && currentImage && (
+      {lightboxOpen && currentImage && createPortal(
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-3 sm:p-6"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-3 sm:p-6"
           role="dialog"
           aria-modal="true"
           aria-label={`Imagen ampliada: ${title}`}
@@ -367,7 +368,7 @@ export default function ProductGalleryAndPurchase({
             type="button"
             onClick={() => setLightboxOpen(false)}
             aria-label="Cerrar imagen"
-            className="absolute right-3 top-3 z-[101] flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-3xl leading-none text-white hover:bg-white/25 sm:right-6 sm:top-6"
+            className="fixed right-4 top-4 z-[10000] flex h-12 w-12 items-center justify-center rounded-full border border-white/40 bg-black/70 text-4xl leading-none text-white shadow-lg hover:bg-black sm:right-6 sm:top-6"
           >
             ×
           </button>
@@ -384,7 +385,8 @@ export default function ProductGalleryAndPurchase({
               priority
             />
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );
