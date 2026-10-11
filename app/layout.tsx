@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://estanteriasevilla.com"),
+  metadataBase: new URL("https://www.estanteriasevilla.com"),
 
   verification: {
     google: "FFEOuE97ebL1djNr4JrTRsKZsd1rwrQD8yFiBNPF3Yo",
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_ES",
-    url: "https://estanteriasevilla.com",
+    url: "https://www.estanteriasevilla.com",
     siteName: "Estantería Sevilla",
     title:
       "Estanterías para Tiendas y Comercios en Sevilla | Estantería Sevilla",
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
   },
 
   alternates: {
-    canonical: "https://estanteriasevilla.com",
+    canonical: "https://www.estanteriasevilla.com",
   },
 };
 
