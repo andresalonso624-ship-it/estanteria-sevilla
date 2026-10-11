@@ -1,9 +1,24 @@
-
+import type { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getCollections } from "@/lib/queries";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Catálogo de estanterías y mobiliario comercial",
+  description: "Explora el catálogo de Estantería Sevilla: estanterías comerciales, mobiliario y equipamiento para tiendas y negocios.",
+  alternates: {
+    canonical: "https://www.estanteriasevilla.com/catalogo",
+  },
+  openGraph: {
+    url: "https://www.estanteriasevilla.com/catalogo",
+    title: "Catálogo de estanterías y mobiliario comercial | Estantería Sevilla",
+    description: "Explora estanterías comerciales, mobiliario y equipamiento para tiendas y negocios.",
+    siteName: "Estantería Sevilla",
+    type: "website",
+  },
+};
 
 interface Collection {
   id: string;
@@ -28,7 +43,6 @@ export default async function CatalogoPage() {
       <Header />
 
       <main className="min-h-screen bg-[#FCFAF7]">
-        {/* Encabezado compacto */}
         <section className="bg-gradient-to-b from-[#F6F1EA] to-[#FCFAF7] px-6 pb-10 pt-10 text-center md:pb-12 md:pt-14">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#A36A33]">
             Estantería Sevilla
@@ -45,7 +59,6 @@ export default async function CatalogoPage() {
           </p>
         </section>
 
-        {/* Categorías */}
         <section className="mx-auto max-w-7xl px-6 pb-16">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-[#2C241C]">
@@ -69,10 +82,7 @@ export default async function CatalogoPage() {
                     {collection.image?.url ? (
                       <Image
                         src={collection.image.url}
-                        alt={
-                          collection.image.altText ||
-                          collection.title
-                        }
+                        alt={collection.image.altText || collection.title}
                         fill
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                         className="object-contain p-3 transition-transform duration-500 group-hover:scale-105"
@@ -88,7 +98,6 @@ export default async function CatalogoPage() {
                     <h3 className="text-sm font-semibold text-[#2C241C] transition-colors group-hover:text-[#A36A33]">
                       {collection.title}
                     </h3>
-
                     <span className="shrink-0 text-[#A36A33] transition-transform group-hover:translate-x-1">
                       →
                     </span>
