@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -13,6 +14,8 @@ import { useEffect, useState } from "react";
 
 import CartDrawer from "@/components/cart/CartDrawer";
 import { useCart } from "@/components/cart/CartProvider";
+import ProductSearch from "@/components/layout/ProductSearch";
+import { useLanguage } from "@/components/layout/LanguageProvider";
 
 interface Collection {
   id: string;
@@ -21,29 +24,16 @@ interface Collection {
 }
 
 export default function Header() {
-  const {
-    open,
-    openCart,
-    closeCart,
-    cartCount,
-  } = useCart();
+  const { open, openCart, closeCart, cartCount } = useCart();
+  const { language, setLanguage, t } = useLanguage();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [catalogOpen, setCatalogOpen] = useState(false);
-
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loadingCollections, setLoadingCollections] = useState(false);
 
-  /* =====================================================
-     CARGAR CATEGORÍAS
-  ===================================================== */
-
   useEffect(() => {
-    if (!mobileMenuOpen || !catalogOpen) {
-      return;
-    }
-
-    if (collections.length > 0) {
+    if (!mobileMenuOpen || !catalogOpen || collections.length > 0) {
       return;
     }
 
@@ -54,50 +44,29 @@ export default function Header() {
         const response = await fetch("/api/collections");
 
         if (!response.ok) {
-          throw new Error(
-            "No se pudieron cargar las categorías"
-          );
+          throw new Error("No se pudieron cargar las categorías");
         }
 
         const data = await response.json();
 
-        setCollections(data);
+        setCollections(Array.isArray(data) ? data : []);
       } catch (error) {
-        console.error(
-          "Error cargando categorías:",
-          error
-        );
+        console.error("Error cargando categorías:", error);
       } finally {
         setLoadingCollections(false);
       }
     }
 
-    loadCollections();
-  }, [
-    mobileMenuOpen,
-    catalogOpen,
-    collections.length,
-  ]);
-
-  /* =====================================================
-     CERRAR MENÚ
-  ===================================================== */
+    void loadCollections();
+  }, [mobileMenuOpen, catalogOpen, collections.length]);
 
   function closeMobileMenu() {
     setMobileMenuOpen(false);
     setCatalogOpen(false);
   }
 
-  /* =====================================================
-     BLOQUEAR SCROLL DEL FONDO CUANDO EL MENÚ ESTÁ ABIERTO
-  ===================================================== */
-
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
 
     return () => {
       document.body.style.overflow = "";
@@ -106,61 +75,23 @@ export default function Header() {
 
   return (
     <>
-      {/* =================================================
-          BARRA SUPERIOR
-      ================================================= */}
-
+      {/* BARRA SUPERIOR */}
       <div className="hidden bg-[#111111] text-white lg:block">
         <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-6 text-sm">
           <div className="flex items-center gap-8">
-            <span>
-              📦 Envíos a toda España
-            </span>
-
-            <span>
-              ☎ +34 688 097 157
-            </span>
-
-            <span>
-              ✉ Estanteriasevilla@163.com
-            </span>
+            <span>📦 {t("shipping")}</span>
+            <span>☎ +34 688 097 157</span>
+            <span>✉ Estanteriasevilla@163.com</span>
           </div>
 
-          <span>
-            Lunes - Viernes 10:00 - 20:00
-          </span>
+          <span>{t("schedule")}</span>
         </div>
       </div>
 
-      {/* =================================================
-          HEADER PRINCIPAL
-      ================================================= */}
-
-      <header
-        className="
-          sticky top-0 z-[999]
-          border-b border-gray-200
-          bg-white
-          shadow-sm
-        "
-      >
-        <div
-          className="
-            mx-auto flex h-[74px]
-            max-w-7xl
-            items-center
-            justify-between
-            px-4
-            sm:px-6
-            lg:h-20
-            lg:px-8
-          "
-        >
-
-          {/* =================================================
-              LOGO
-          ================================================= */}
-
+      {/* ENCABEZADO PRINCIPAL */}
+      <header className="sticky top-0 z-[999] border-b border-gray-200 bg-white shadow-sm">
+        <div className="mx-auto flex h-[74px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-20 lg:px-8">
+          {/* LOGO */}
           <Link
             href="/"
             onClick={closeMobileMenu}
@@ -172,256 +103,104 @@ export default function Header() {
               width={150}
               height={55}
               priority
-              className="
-                h-auto
-                w-[200px]
-                rounded-md
-                bg-white
-                px-2
-                py-1
-                object-contain
-                sm:w-[155px]
-                lg:w-[200px]
-                lg:bg-transparent
-                lg:px-0
-                lg:py-0
-              "
+              className="h-auto w-[150px] rounded-md bg-white px-2 py-1 object-contain sm:w-[155px] lg:w-[200px] lg:bg-transparent lg:px-0 lg:py-0"
             />
           </Link>
 
-          {/* =================================================
-              MENÚ ORDENADOR
-          ================================================== */}
-
-          <nav className="hidden lg:block">
+          {/* MENÚ DE ORDENADOR */}
+          <nav className="hidden lg:block" aria-label="Navegación principal">
             <ul className="flex items-center gap-10 text-sm font-semibold uppercase">
-
-              {/* INICIO */}
-
               <li>
                 <Link
                   href="/"
-                  className="
-                    border-b-2
-                    border-[#C6922F]
-                    pb-1
-                    text-[#C6922F]
-                  "
+                  className="border-b-2 border-[#C6922F] pb-1 text-[#C6922F]"
                 >
-                  Inicio
+                  {t("home")}
                 </Link>
               </li>
-
-              {/* CATÁLOGO */}
 
               <li>
                 <Link
                   href="/catalogo"
-                  className="
-                    text-[#111111]
-                    transition
-                    hover:text-[#C6922F]
-                  "
+                  className="text-[#111111] transition hover:text-[#C6922F]"
                 >
-                  Catálogo
+                  {t("catalog")}
                 </Link>
               </li>
-
-              {/* PRESUPUESTO */}
 
               <li>
                 <Link
                   href="/presupuesto"
-                  className="
-                    text-[#111111]
-                    transition
-                    hover:text-[#C6922F]
-                  "
+                  className="text-[#111111] transition hover:text-[#C6922F]"
                 >
-                  Presupuesto
+                  {t("budget")}
                 </Link>
               </li>
-
             </ul>
           </nav>
 
-          {/* =================================================
-              ICONOS
-          ================================================== */}
+          {/* SELECTOR DE IDIOMA, BUSCADOR Y CARRITO */}
+          <div className="flex items-center gap-2 sm:gap-4">
+            <label className="flex items-center">
+              <span className="sr-only">{t("language")}</span>
+              <select
+                aria-label={t("language")}
+                value={language}
+                onChange={(event) =>
+                  setLanguage(event.target.value as "es" | "zh")
+                }
+                className="max-w-[86px] rounded-full border border-gray-200 bg-white px-2 py-2 text-xs font-medium text-[#2C241C] outline-none transition hover:border-[#C6922F] focus-visible:ring-2 focus-visible:ring-[#C6922F] sm:max-w-none sm:px-3 sm:text-sm"
+              >
+                <option value="es">🇪🇸 ES</option>
+                <option value="zh">🇨🇳 中文</option>
+              </select>
+            </label>
 
-          <div className="flex items-center gap-4 sm:gap-5">
-
-            {/* =================================================
-                BUSCAR
-            ================================================= */}
-
-            <Link
-              href="/catalogo"
-              aria-label="Buscar productos"
-              className="
-                flex h-10 w-10
-                items-center justify-center
-                rounded-full
-                text-[#111111]
-                transition
-                hover:bg-gray-100
-                hover:text-[#C6922F]
-              "
-            >
-              <Search
-                size={22}
-                strokeWidth={1.8}
-              />
-            </Link>
-
-            {/* =================================================
-                CARRITO
-            ================================================= */}
+            <ProductSearch />
 
             <button
               type="button"
-              aria-label="Abrir carrito"
+              aria-label={t("openCart")}
               onClick={openCart}
-              className="
-                relative
-                flex h-10 w-10
-                items-center justify-center
-                rounded-full
-                text-[#111111]
-                transition
-                hover:bg-gray-100
-                hover:text-[#C6922F]
-              "
+              className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[#111111] transition hover:bg-gray-100 hover:text-[#C6922F]"
             >
-              <ShoppingCart
-                size={22}
-                strokeWidth={1.8}
-              />
+              <ShoppingCart size={22} strokeWidth={1.8} />
 
-              {/* CONTADOR */}
-
-              <span
-                className="
-                  absolute
-                  -right-1
-                  -top-1
-                  flex
-                  h-5
-                  min-w-5
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-[#C6922F]
-                  px-1
-                  text-[10px]
-                  font-bold
-                  text-white
-                "
-              >
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#C6922F] px-1 text-[10px] font-bold text-white">
                 {cartCount}
               </span>
             </button>
 
-            {/* =================================================
-                MENÚ MÓVIL
-            ================================================== */}
-
+            {/* BOTÓN DEL MENÚ MÓVIL */}
             <button
               type="button"
-              aria-label={
-                mobileMenuOpen
-                  ? "Cerrar menú"
-                  : "Abrir menú"
-              }
+              aria-label={mobileMenuOpen ? t("closeMenu") : t("openMenu")}
               aria-expanded={mobileMenuOpen}
               onClick={() => {
-                const newState =
-                  !mobileMenuOpen;
+                const nextOpen = !mobileMenuOpen;
+                setMobileMenuOpen(nextOpen);
 
-                setMobileMenuOpen(newState);
-
-                if (!newState) {
+                if (!nextOpen) {
                   setCatalogOpen(false);
                 }
               }}
-              className="
-                flex h-10 w-10
-                items-center justify-center
-                rounded-full
-                text-[#111111]
-                transition
-                hover:bg-gray-100
-                hover:text-[#C6922F]
-                lg:hidden
-              "
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[#111111] transition hover:bg-gray-100 hover:text-[#C6922F] lg:hidden"
             >
               {mobileMenuOpen ? (
-                <X
-                  size={25}
-                  strokeWidth={1.8}
-                />
+                <X size={25} strokeWidth={1.8} />
               ) : (
-                <Menu
-                  size={25}
-                  strokeWidth={1.8}
-                />
+                <Menu size={25} strokeWidth={1.8} />
               )}
             </button>
-
           </div>
         </div>
 
-        {/* =================================================
-            MENÚ MÓVIL
-        ================================================== */}
-
+        {/* MENÚ MÓVIL */}
         {mobileMenuOpen && (
-          <div
-            className="
-              fixed
-              inset-0
-              z-[1000]
-              bg-black/60
-              lg:hidden
-            "
-          >
-
-            {/* =================================================
-                PANEL
-            ================================================= */}
-
-            <div
-              className="
-                absolute
-                right-0
-                top-0
-                flex
-                h-[100dvh]
-                w-full
-                max-w-[420px]
-                flex-col
-                bg-white
-                shadow-2xl
-              "
-            >
-
-              {/* =================================================
-                  CABECERA DEL MENÚ
-              ================================================= */}
-
-              <div
-                className="
-                  flex
-                  h-[74px]
-                  shrink-0
-                  items-center
-                  justify-between
-                  border-b
-                  border-gray-100
-                  px-6
-                "
-              >
-
+          <div className="fixed inset-0 z-[1000] bg-black/60 lg:hidden">
+            <div className="absolute right-0 top-0 flex h-[100dvh] w-full max-w-[420px] flex-col bg-white shadow-2xl">
+              {/* CABECERA DEL MENÚ */}
+              <div className="flex h-[74px] shrink-0 items-center justify-between border-b border-gray-100 px-6">
                 <Link
                   href="/"
                   onClick={closeMobileMenu}
@@ -433,307 +212,120 @@ export default function Header() {
                     width={150}
                     height={55}
                     priority
-                    className="
-                      h-auto
-                      w-[125px]
-                      object-contain
-                    "
+                    className="h-auto w-[125px] object-contain"
                   />
                 </Link>
 
                 <button
                   type="button"
                   onClick={closeMobileMenu}
-                  className="
-                    flex
-                    h-10
-                    w-10
-                    items-center
-                    justify-center
-                    rounded-full
-                    text-gray-900
-                    transition
-                    hover:bg-gray-100
-                  "
-                  aria-label="Cerrar menú"
+                  aria-label={t("closeMenu")}
+                  className="flex h-10 w-10 items-center justify-center rounded-full text-gray-900 transition hover:bg-gray-100"
                 >
-                  <X
-                    size={25}
-                    strokeWidth={1.8}
-                  />
+                  <X size={25} strokeWidth={1.8} />
                 </button>
-
               </div>
 
-              {/* =================================================
-                  CONTENIDO CON SCROLL
-              ================================================== */}
-
-              <div
-                className="
-                  min-h-0
-                  flex-1
-                  overflow-y-auto
-                  overscroll-contain
-                  touch-pan-y
-                  pb-10
-                "
-              >
-
-                <nav className="px-6 pt-4">
-
-                  {/* =================================================
-                      INICIO
-                  ================================================= */}
-
+              {/* CONTENIDO DEL MENÚ */}
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-10">
+                <nav
+                  className="px-6 pt-4"
+                  aria-label="Navegación móvil"
+                >
+                  {/* INICIO */}
                   <Link
                     href="/"
                     onClick={closeMobileMenu}
-                    className="
-                      flex
-                      min-h-[58px]
-                      items-center
-                      border-b
-                      border-gray-100
-                      text-sm
-                      font-semibold
-                      text-[#111111]
-                      transition
-                      hover:text-[#C6922F]
-                    "
+                    className="flex min-h-[58px] items-center border-b border-gray-100 text-sm font-semibold text-[#111111] transition hover:text-[#C6922F]"
                   >
-                    INICIO
+                    {t("home")}
                   </Link>
 
-                  {/* =================================================
-                      CATÁLOGO
-                  ================================================= */}
-
+                  {/* CATÁLOGO */}
                   <div className="border-b border-gray-100">
-
                     <button
                       type="button"
-                      onClick={() =>
-                        setCatalogOpen(
-                          (prev) => !prev
-                        )
-                      }
-                      className="
-                        flex
-                        min-h-[58px]
-                        w-full
-                        items-center
-                        justify-between
-                        text-left
-                        text-sm
-                        font-semibold
-                        text-[#111111]
-                      "
+                      onClick={() => setCatalogOpen((prev) => !prev)}
+                      aria-expanded={catalogOpen}
+                      className="flex min-h-[58px] w-full items-center justify-between text-left text-sm font-semibold text-[#111111]"
                     >
-
-                      <span>
-                        CATÁLOGO
-                      </span>
+                      <span>{t("catalog")}</span>
 
                       <ChevronDown
                         size={19}
-                        className={`
-                          text-[#C6922F]
-                          transition-transform
-                          duration-200
-                          ${
-                            catalogOpen
-                              ? "rotate-180"
-                              : ""
-                          }
-                        `}
+                        className={`text-[#C6922F] transition-transform duration-200 ${
+                          catalogOpen ? "rotate-180" : ""
+                        }`}
                       />
-
                     </button>
 
-                    {/* =================================================
-                        CATEGORÍAS
-                    ================================================== */}
-
+                    {/* CATEGORÍAS DE SHOPIFY */}
                     {catalogOpen && (
-                      <div
-                        className="
-                          mb-4
-                          overflow-hidden
-                          rounded-2xl
-                          border
-                          border-[#eee9e1]
-                          bg-[#FCFAF7]
-                        "
-                      >
-
-                        {/* TODOS LOS PRODUCTOS */}
-
+                      <div className="mb-4 overflow-hidden rounded-2xl border border-[#eee9e1] bg-[#FCFAF7]">
                         <Link
                           href="/catalogo"
                           onClick={closeMobileMenu}
-                          className="
-                            flex
-                            min-h-[56px]
-                            items-center
-                            border-b
-                            border-[#eee9e1]
-                            px-4
-                            text-sm
-                            font-semibold
-                            text-[#C6922F]
-                            transition
-                            hover:bg-[#f5efe5]
-                          "
+                          className="flex min-h-[56px] items-center border-b border-[#eee9e1] px-4 text-sm font-semibold text-[#C6922F] transition hover:bg-[#f5efe5]"
                         >
-                          Todos los productos
+                          {t("allProducts")}
                         </Link>
 
-                        {/* CARGANDO */}
-
                         {loadingCollections && (
-                          <div
-                            className="
-                              px-4
-                              py-5
-                              text-sm
-                              text-gray-500
-                            "
-                          >
-                            Cargando categorías...
+                          <div className="px-4 py-5 text-sm text-gray-500">
+                            {t("loadingCategories")}
                           </div>
                         )}
 
-                        {/* CATEGORÍAS */}
-
                         {!loadingCollections &&
-                          collections.map(
-                            (collection) => (
-                              <Link
-                                key={
-                                  collection.id
-                                }
-                                href={`/catalogo?categoria=${encodeURIComponent(
-                                  collection.handle
-                                )}`}
-                                onClick={
-                                  closeMobileMenu
-                                }
-                                className="
-                                  flex
-                                  min-h-[46px]
-                                  items-center
-                                  border-b
-                                  border-[#eee9e1]
-                                  px-4
-                                  text-sm
-                                  text-[#222222]
-                                  transition
-                                  hover:bg-[#f5efe5]
-                                  hover:text-[#C6922F]
-                                "
-                              >
-                                {
-                                  collection.title
-                                }
-                              </Link>
-                            )
-                          )}
-
-                        {/* SI NO HAY CATEGORÍAS */}
-
-                        {!loadingCollections &&
-                          collections.length ===
-                            0 && (
-                            <div
-                              className="
-                                px-4
-                                py-5
-                                text-sm
-                                text-gray-500
-                              "
+                          collections.map((collection) => (
+                            <Link
+                              key={collection.id}
+                              href={`/catalogo?categoria=${encodeURIComponent(
+                                collection.handle,
+                              )}`}
+                              onClick={closeMobileMenu}
+                              className="flex min-h-[46px] items-center border-b border-[#eee9e1] px-4 text-sm text-[#222222] transition hover:bg-[#f5efe5] hover:text-[#C6922F]"
                             >
-                              No hay categorías
-                              disponibles.
-                            </div>
-                          )}
+                              {collection.title}
+                            </Link>
+                          ))}
 
+                        {!loadingCollections && collections.length === 0 && (
+                          <div className="px-4 py-5 text-sm text-gray-500">
+                            {t("noCategories")}
+                          </div>
+                        )}
                       </div>
                     )}
-
                   </div>
 
-                  {/* =================================================
-                      PRESUPUESTO
-                  ================================================== */}
-
+                  {/* PRESUPUESTO */}
                   <Link
                     href="/presupuesto"
                     onClick={closeMobileMenu}
-                    className="
-                      flex
-                      min-h-[58px]
-                      items-center
-                      border-b
-                      border-gray-100
-                      text-sm
-                      font-semibold
-                      text-[#111111]
-                      transition
-                      hover:text-[#C6922F]
-                    "
+                    className="flex min-h-[58px] items-center border-b border-gray-100 text-sm font-semibold text-[#111111] transition hover:text-[#C6922F]"
                   >
-                    PRESUPUESTO
+                    {t("budget")}
                   </Link>
 
-                  {/* =================================================
-                      BUSCAR PRODUCTOS
-                  ================================================== */}
-
+                  {/* BUSCAR PRODUCTOS */}
                   <Link
                     href="/catalogo"
                     onClick={closeMobileMenu}
-                    className="
-                      flex
-                      min-h-[58px]
-                      items-center
-                      gap-3
-                      text-sm
-                      font-semibold
-                      text-[#111111]
-                      transition
-                      hover:text-[#C6922F]
-                    "
+                    className="flex min-h-[58px] items-center gap-3 text-sm font-semibold text-[#111111] transition hover:text-[#C6922F]"
                   >
-
-                    <Search
-                      size={20}
-                    />
-
-                    BUSCAR PRODUCTOS
-
+                    <Search size={20} />
+                    {t("searchProducts")}
                   </Link>
-
                 </nav>
-
               </div>
-
             </div>
-
           </div>
         )}
-
       </header>
 
-      {/* =================================================
-          CARRITO
-      ================================================== */}
-
-      <CartDrawer
-        open={open}
-        onClose={closeCart}
-      />
-
+      {/* CARRITO: SE CONSERVA EL COMPONENTE ORIGINAL */}
+      <CartDrawer open={open} onClose={closeCart} />
     </>
   );
 }

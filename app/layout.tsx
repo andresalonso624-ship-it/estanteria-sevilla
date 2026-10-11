@@ -1,9 +1,11 @@
+
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import CartProvider from "@/components/cart/CartProvider";
+import LanguageProvider from "@/components/layout/LanguageProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,9 +19,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://estanteriasevilla.com"),
+
   verification: {
-  google: "FFEOuE97ebL1djNr4JrTRsKZsd1rwrQD8yFiBNPF3Yo",
-},
+    google: "FFEOuE97ebL1djNr4JrTRsKZsd1rwrQD8yFiBNPF3Yo",
+  },
 
   title: {
     default:
@@ -98,9 +101,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <body className="min-h-screen bg-white text-[#111111] antialiased">
-        <CartProvider>
-          {children}
-        </CartProvider>
+        <LanguageProvider>
+          <CartProvider>{children}</CartProvider>
+        </LanguageProvider>
 
         <Analytics />
       </body>

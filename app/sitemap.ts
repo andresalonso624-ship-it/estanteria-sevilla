@@ -6,7 +6,7 @@ import {
 } from "@/lib/queries";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://estanteriasevilla.com";
+  const baseUrl = "https://www.estanteriasevilla.com";
 
   /* =====================================================
      OBTENER DATOS DE SHOPIFY
@@ -117,7 +117,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       );
 
   /* =====================================================
-     RESULTADO
+     RESULTADO FINAL
   ===================================================== */
 
   return [

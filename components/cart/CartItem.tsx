@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -11,12 +12,14 @@ export type CartLine = {
     title: string;
     price: {
       amount: string;
+      currencyCode?: string;
     };
     product: {
       title: string;
       featuredImage?: {
         url: string;
-      };
+        altText?: string | null;
+      } | null;
     };
   };
 };
@@ -28,82 +31,138 @@ type Props = {
   onRemove: () => void;
 };
 
+function formatPrice(amount: string, currencyCode = "EUR") {
+  const value = Number(amount);
+
+  if (!Number.isFinite(value)) {
+    return "Precio no disponible";
+  }
+
+  try {
+    return value.toLocaleString("es-ES", {
+      style: "currency",
+      currency: currencyCode,
+    });
+  } catch {
+    return `${value.toFixed(2)} €`;
+  }
+}
+
 export default function CartItem({
   line,
   onIncrease,
   onDecrease,
   onRemove,
 }: Props) {
+  const product = line.merchandise.product;
+  const merchandise = line.merchandise;
+  const currency = merchandise.price.currencyCode || "EUR";
+
+  const unitPrice = Number(merchandise.price.amount);
+  const subtotal = unitPrice * line.quantity;
+
   return (
-    <div className="flex gap-4 border-b pb-5">
+    <article className="w-full">
+      {/* PRODUCTO */}
+      <div className="flex items-start gap-3 sm:gap-4">
+        {/* Imagen */}
+        <div className="relative h-[100px] w-[100px] shrink-0 overflow-hidden rounded-2xl border border-[#E9E2D9] bg-white sm:h-[112px] sm:w-[112px]">
+          {product.featuredImage?.url ? (
+            <Image
+              src={product.featuredImage.url}
+              alt={product.featuredImage.altText || product.title}
+              fill
+              sizes="(max-width: 640px) 100px, 112px"
+              className="object-contain p-2.5"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center px-2 text-center text-xs text-[#8B8177]">
+              Sin imagen
+            </div>
+          )}
+        </div>
 
-      <div className="relative h-24 w-24 overflow-hidden rounded-xl bg-gray-100">
+        {/* Información del producto */}
+        <div className="min-w-0 flex-1 pt-0.5">
+          <h3 className="break-words text-[15px] font-semibold leading-5 text-[#2C241C] sm:text-base sm:leading-6">
+            {product.title}
+          </h3>
 
-        {line.merchandise.product.featuredImage && (
-          <Image
-            src={line.merchandise.product.featuredImage.url}
-            alt={line.merchandise.product.title}
-            fill
-            className="object-contain p-2"
-          />
-        )}
+          {merchandise.title &&
+            merchandise.title !== "Default Title" && (
+              <p className="mt-1 break-words text-xs leading-5 text-[#76695E] sm:text-sm">
+                {merchandise.title}
+              </p>
+            )}
 
-      </div>
+          <p className="mt-3 text-sm leading-5 text-[#76695E]">
+            <span className="font-semibold text-[#8B5E34]">
+              {formatPrice(merchandise.price.amount, currency)}
+            </span>
+            <span> / unidad</span>
+          </p>
 
-      <div className="flex flex-1 flex-col">
+          <div className="mt-2">
+            <p className="text-sm text-[#76695E]">Subtotal del producto</p>
+            <p className="mt-0.5 text-base font-bold leading-6 text-[#2C241C]">
+              {Number.isFinite(subtotal)
+                ? formatPrice(String(subtotal), currency)
+                : "—"}
+            </p>
+          </div>
+        </div>
 
-        <h3 className="font-semibold">
-          {line.merchandise.product.title}
-        </h3>
-
-        <p className="text-sm text-gray-500">
-          {line.merchandise.title}
-        </p>
-
-        <span className="mt-2 text-lg font-bold">
-          {Number(
-            line.merchandise.price.amount
-          ).toFixed(2)} €
-        </span>
-
-      </div>
-
-      <div className="flex flex-col items-end justify-between">
-
+        {/* Eliminar */}
         <button
+          type="button"
           onClick={onRemove}
-          className="rounded-lg p-2 transition hover:bg-red-50"
+          aria-label={`Eliminar ${product.title} del carrito`}
+          title="Eliminar producto"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#A94442] transition hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
         >
-          <Trash2
-            size={18}
-            className="text-red-500"
-          />
+          <Trash2 size={18} strokeWidth={1.8} />
         </button>
+      </div>
 
-        <div className="flex items-center gap-3 rounded-lg border px-2 py-1">
+      {/* CANTIDAD */}
+      <div className="mt-5 flex items-center justify-between gap-3 rounded-xl bg-white px-3.5 py-3 sm:px-4">
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-[#2C241C]">
+            Cantidad
+          </p>
+          <p className="mt-0.5 text-xs text-[#8B8177]">
+            Modifica las unidades
+          </p>
+        </div>
 
+        <div className="flex h-10 shrink-0 items-center rounded-xl border border-[#E9E2D9] bg-[#FCFAF7]">
           <button
+            type="button"
             onClick={onDecrease}
-            className="p-1"
+            disabled={line.quantity <= 1}
+            aria-label={`Reducir cantidad de ${product.title}`}
+            className="flex h-full w-10 items-center justify-center rounded-l-xl text-[#2C241C] transition hover:bg-[#F0E7DC] disabled:cursor-not-allowed disabled:opacity-35"
           >
             <Minus size={15} />
           </button>
 
-          <span className="w-6 text-center font-semibold">
+          <span
+            aria-live="polite"
+            className="min-w-9 text-center text-sm font-semibold tabular-nums text-[#2C241C]"
+          >
             {line.quantity}
           </span>
 
           <button
+            type="button"
             onClick={onIncrease}
-            className="p-1"
+            aria-label={`Aumentar cantidad de ${product.title}`}
+            className="flex h-full w-10 items-center justify-center rounded-r-xl text-[#2C241C] transition hover:bg-[#F0E7DC]"
           >
             <Plus size={15} />
           </button>
-
         </div>
-
       </div>
-
-    </div>
+    </article>
   );
 }

@@ -1,3 +1,4 @@
+
 import { shopifyFetch } from "./shopify";
 
 /* =========================================================
@@ -41,6 +42,11 @@ export async function getProducts() {
               }
             }
 
+            options {
+              name
+              values
+            }
+
             variants(first: 20) {
               nodes {
                 id
@@ -79,20 +85,14 @@ export async function getProducts() {
 
     const data = await shopifyFetch(query);
 
-    allProducts.push(
-      ...data.products.nodes
-    );
+    allProducts.push(...data.products.nodes);
 
-    hasNextPage =
-      data.products.pageInfo.hasNextPage;
-
-    cursor =
-      data.products.pageInfo.endCursor;
+    hasNextPage = data.products.pageInfo.hasNextPage;
+    cursor = data.products.pageInfo.endCursor;
   }
 
   return allProducts;
 }
-
 
 /* =========================================================
    OBTENER TODAS LAS CATEGORÍAS / COLECCIONES
@@ -137,33 +137,23 @@ export async function getCollections() {
       }
     `;
 
-    const data =
-      await shopifyFetch(query);
+    const data = await shopifyFetch(query);
 
-    allCollections.push(
-      ...data.collections.nodes
-    );
+    allCollections.push(...data.collections.nodes);
 
-    hasNextPage =
-      data.collections.pageInfo.hasNextPage;
-
-    cursor =
-      data.collections.pageInfo.endCursor;
+    hasNextPage = data.collections.pageInfo.hasNextPage;
+    cursor = data.collections.pageInfo.endCursor;
   }
 
   return allCollections;
 }
 
-
 /* =========================================================
    OBTENER UNA COLECCIÓN POR HANDLE
 ========================================================= */
 
-export async function getCollectionByHandle(
-  handle: string
-) {
-  const safeHandle =
-    JSON.stringify(handle);
+export async function getCollectionByHandle(handle: string) {
+  const safeHandle = JSON.stringify(handle);
 
   const query = `
     {
@@ -208,6 +198,11 @@ export async function getCollectionByHandle(
               }
             }
 
+            options {
+              name
+              values
+            }
+
             variants(first: 20) {
               nodes {
                 id
@@ -245,22 +240,18 @@ export async function getCollectionByHandle(
     }
   `;
 
-  const data =
-    await shopifyFetch(query);
+  const data = await shopifyFetch(query);
 
   return data.collection;
 }
 
-
 /* =========================================================
    OBTENER UN PRODUCTO POR HANDLE
+   INCLUYE GALERÍA, OPCIONES Y VARIANTES
 ========================================================= */
 
-export async function getProductByHandle(
-  handle: string
-) {
-  const safeHandle =
-    JSON.stringify(handle);
+export async function getProductByHandle(handle: string) {
+  const safeHandle = JSON.stringify(handle);
 
   const query = `
     {
@@ -286,6 +277,11 @@ export async function getProductByHandle(
             url
             altText
           }
+        }
+
+        options {
+          name
+          values
         }
 
         variants(first: 50) {
@@ -318,8 +314,7 @@ export async function getProductByHandle(
     }
   `;
 
-  const data =
-    await shopifyFetch(query);
+  const data = await shopifyFetch(query);
 
   return data.product;
 }

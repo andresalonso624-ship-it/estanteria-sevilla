@@ -1,11 +1,13 @@
+
 "use client";
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
-  ReactNode,
+  type ReactNode,
 } from "react";
 
 type CartContextType = {
@@ -16,136 +18,106 @@ type CartContextType = {
   refreshCart: () => Promise<void>;
 };
 
-const CartContext = createContext<CartContextType | null>(
-  null
-);
+const CartContext = createContext<CartContextType | null>(null);
 
 type Props = {
   children: ReactNode;
 };
 
-export default function CartProvider({
-  children,
-}: Props) {
+export default function CartProvider({ children }: Props) {
+  const [open, setOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
-  const [open, setOpen] =
-    useState(false);
-
-  const [cartCount, setCartCount] =
-    useState(0);
-
-  async function refreshCart() {
-
+  const refreshCart = useCallback(async () => {
     try {
-
-      const cartId =
-        localStorage.getItem(
-          "shopify-cart-id"
-        );
+      const cartId = localStorage.getItem("shopify-cart-id");
 
       if (!cartId) {
-
         setCartCount(0);
-
         return;
-
       }
 
-      const response = await fetch(
-        "/api/cart/get",
-        {
-          method: "POST",
+      const response = await fetch("/api/cart/get", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cartId }),
+        cache: "no-store",
+      });
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
+      if (!response.ok) {
+        console.error(
+          "No se pudo actualizar el contador del carrito."
+        );
+        return;
+      }
 
-          body: JSON.stringify({
-            cartId,
-          }),
-        }
-      );
+      const cart = await response.json();
 
-      if (!response.ok) return;
+      if (cart.error) {
+        console.error("Error al consultar el carrito:", cart.error);
+        return;
+      }
 
-      const cart =
-        await response.json();
-
-      setCartCount(
-        cart.totalQuantity || 0
-      );
-
+      setCartCount(Number(cart.totalQuantity) || 0);
     } catch (error) {
-
-      console.error(error);
-
+      console.error("Error actualizando el carrito:", error);
     }
-
-  }
+  }, []);
 
   useEffect(() => {
+    void refreshCart();
 
-    refreshCart();
-
-  }, []);
-    useEffect(() => {
-
-    function updateCart() {
-
-      refreshCart();
-
+    function handleCartUpdated() {
+      void refreshCart();
     }
 
-    window.addEventListener(
-      "cartUpdated",
-      updateCart
-    );
+    window.addEventListener("cartUpdated", handleCartUpdated);
+
+    window.addEventListener("storage", handleCartUpdated);
 
     return () => {
-
       window.removeEventListener(
         "cartUpdated",
-        updateCart
+        handleCartUpdated
       );
 
+      window.removeEventListener("storage", handleCartUpdated);
     };
+  }, [refreshCart]);
 
+  const openCart = useCallback(() => {
+    setOpen(true);
+  }, []);
+
+  const closeCart = useCallback(() => {
+    setOpen(false);
   }, []);
 
   return (
-
     <CartContext.Provider
       value={{
         open,
         cartCount,
-        openCart: () => setOpen(true),
-        closeCart: () => setOpen(false),
+        openCart,
+        closeCart,
         refreshCart,
       }}
     >
-
       {children}
-
     </CartContext.Provider>
-
   );
-
 }
 
 export function useCart() {
-
-  const context =
-    useContext(CartContext);
+  const context = useContext(CartContext);
 
   if (!context) {
-
     throw new Error(
-      "useCart debe utilizarse dentro de CartProvider"
+      "useCart debe utilizarse dentro de CartProvider."
     );
-
   }
 
   return context;
-
 }
