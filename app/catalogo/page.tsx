@@ -85,7 +85,7 @@ export default async function CatalogoPage() {
                         alt={collection.image.altText || collection.title}
                         fill
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                        className="object-contain p-3 transition-transform duration-500 group-hover:scale-105"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center text-sm text-[#8B8177]">
