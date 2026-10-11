@@ -89,7 +89,7 @@ export default function Header() {
       </div>
 
       {/* ENCABEZADO PRINCIPAL */}
-      <header className="sticky top-0 z-[999] border-b border-[#E6E2DA] bg-[#F8F7F4] shadow-sm">
+      <header className="sticky top-0 z-[999] border-b border-gray-200 bg-white shadow-sm">
         <div className="mx-auto flex h-[74px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-20 lg:px-8">
           {/* LOGO */}
           <Link
@@ -113,7 +113,7 @@ export default function Header() {
               <li>
                 <Link
                   href="/"
-                  className="border-b-2 border-[#967044] pb-1 text-[#967044]"
+                  className="border-b-2 border-[#C6922F] pb-1 text-[#C6922F]"
                 >
                   {t("home")}
                 </Link>
@@ -122,7 +122,7 @@ export default function Header() {
               <li>
                 <Link
                   href="/catalogo"
-                  className="text-[#252525] transition hover:text-[#967044]"
+                  className="text-[#111111] transition hover:text-[#C6922F]"
                 >
                   {t("catalog")}
                 </Link>
@@ -147,7 +147,7 @@ export default function Header() {
               type="button"
               aria-label={t("openCart")}
               onClick={openCart}
-              className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[#252525] transition hover:bg-[#EEEAE3] hover:text-[#967044]"
+              className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[#111111] transition hover:bg-gray-100 hover:text-[#C6922F]"
             >
               <ShoppingCart size={22} strokeWidth={1.8} />
 
