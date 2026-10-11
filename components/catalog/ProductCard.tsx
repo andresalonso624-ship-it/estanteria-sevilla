@@ -67,8 +67,8 @@ export default function ProductCard({
       <article
         className={`group overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
           beige
-            ? "border-[#E9E0D5] bg-[#F5F0E8]"
-            : "border-gray-200 bg-white"
+            ? "border-[#E6E2DA] bg-[#F8F7F4]"
+            : "border-[#E6E2DA] bg-white"
         }`}
       >
         <div className="relative aspect-[4/3] overflow-hidden bg-white">
@@ -112,18 +112,18 @@ export default function ProductCard({
           )}
 
           <div className="mt-3 flex items-center justify-between gap-3">
-            <p className="text-lg font-semibold text-[#8B5E34]">
+            <p className="text-lg font-semibold text-[#967044]">
               {formattedPrice}
             </p>
             {productUrl ? (
               <Link
                 href={productUrl}
-                className="whitespace-nowrap text-sm text-[#8B5E34] transition-transform duration-300 hover:translate-x-1"
+                className="whitespace-nowrap text-sm text-[#967044] transition-transform duration-300 hover:translate-x-1"
               >
                 Ver producto →
               </Link>
             ) : (
-              <span className="whitespace-nowrap text-sm text-[#8B5E34]">
+              <span className="whitespace-nowrap text-sm text-[#967044]">
                 Ver producto
               </span>
             )}
