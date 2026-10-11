@@ -16,10 +16,10 @@ export default function Home() {
 
         <section
           aria-labelledby="estanterias-comerciales-sevilla"
-          className="bg-[#F8F7F4] px-6 py-14 sm:py-16"
+          className="bg-white px-6 py-14 sm:py-16"
         >
           <div className="mx-auto max-w-5xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#967044]">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#A36A33]">
               Equipamiento comercial
             </p>
             <h2
@@ -44,19 +44,19 @@ export default function Home() {
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href="/catalogo/estanterias-de-comercio"
-                className="inline-flex items-center justify-center rounded-full bg-[#967044] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#795A39]"
+                className="inline-flex items-center justify-center rounded-full bg-[#A36A33] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#7A4E24]"
               >
                 Ver estanterías comerciales
               </Link>
               <Link
                 href="/presupuesto"
-                className="inline-flex items-center justify-center rounded-full border border-[#967044] px-6 py-3 text-sm font-semibold text-[#967044] transition hover:bg-[#EEEAE3]"
+                className="inline-flex items-center justify-center rounded-full border border-[#A36A33] px-6 py-3 text-sm font-semibold text-[#8B5E34] transition hover:bg-[#F8F5F1]"
               >
                 Solicitar presupuesto
               </Link>
               <Link
                 href="/catalogo/mobiliario-muebles-mostradores"
-                className="inline-flex items-center justify-center rounded-full border border-[#E6E2DA] px-6 py-3 text-sm font-semibold text-[#2C241C] transition hover:bg-[#F8F5F1]"
+                className="inline-flex items-center justify-center rounded-full border border-[#E9E2D9] px-6 py-3 text-sm font-semibold text-[#2C241C] transition hover:bg-[#F8F5F1]"
               >
                 Ver mostradores y mobiliario
               </Link>
