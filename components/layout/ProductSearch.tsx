@@ -109,7 +109,7 @@ export default function ProductSearch() {
 
       {/* BUSCADOR COMPACTO */}
       {open && (
-        <div className="absolute right-0 top-full z-[2000] mt-3 w-[min(360px,calc(100vw-24px))] rounded-xl border border-[#E9E2D9] bg-white p-3 shadow-xl sm:w-[400px]">
+        <div className="fixed left-3 right-3 top-[100px] z-[2000] max-h-[calc(100dvh-116px)] overflow-hidden rounded-xl border border-[#E9E2D9] bg-white p-3 shadow-2xl sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-3 sm:max-h-none sm:w-[400px] sm:translate-x-0">
           <form
             role="search"
             onSubmit={(event) => event.preventDefault()}
@@ -140,7 +140,7 @@ export default function ProductSearch() {
             )}
           </form>
 
-          <div className="mt-2 max-h-[320px] overflow-y-auto">
+          <div className="mt-2 max-h-[min(320px,calc(100dvh-300px))] overflow-y-auto sm:max-h-[320px]">
             {term.trim().length < 2 ? (
               <p className="px-2 py-3 text-xs text-gray-500">
                 Escribe al menos dos letras.
