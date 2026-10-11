@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Check } from "lucide-react";
 import ProductPurchase from "@/components/catalog/ProductPurchase";
@@ -83,6 +83,23 @@ export default function ProductGalleryAndPurchase({
   const initialVariant = variants[0] ?? null;
 
   const [activeImage, setActiveImage] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setLightboxOpen(false);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [lightboxOpen]);
 
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, string>
@@ -148,15 +165,22 @@ export default function ProductGalleryAndPurchase({
           <div className="min-w-0 overflow-hidden rounded-2xl border border-[#E9E2D9] bg-white">
             <div className="relative aspect-square w-full">
               {currentImage ? (
-                <Image
-                  key={currentImage.url}
-                  src={currentImage.url}
-                  alt={currentImage.altText || title}
-                  fill
-                  priority
-                  sizes="(max-width: 1023px) 80vw, 43vw"
-                  className="object-contain p-3 sm:p-5"
-                />
+                <button
+                  type="button"
+                  onClick={() => setLightboxOpen(true)}
+                  aria-label={`Ampliar imagen de ${title}`}
+                  className="absolute inset-0 block h-full w-full cursor-zoom-in"
+                >
+                  <Image
+                    key={currentImage.url}
+                    src={currentImage.url}
+                    alt={currentImage.altText || title}
+                    fill
+                    priority
+                    sizes="(max-width: 1023px) 80vw, 43vw"
+                    className="object-contain p-3 sm:p-5"
+                  />
+                </button>
               ) : (
                 <div className="flex aspect-square items-center justify-center bg-[#F5F0E8] text-sm text-gray-500">
                   Imagen no disponible
@@ -330,6 +354,38 @@ export default function ProductGalleryAndPurchase({
           )}
         </div>
       </div>
+
+      {lightboxOpen && currentImage && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-3 sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Imagen ampliada: ${title}`}
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(false)}
+            aria-label="Cerrar imagen"
+            className="absolute right-3 top-3 z-[101] flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-3xl leading-none text-white hover:bg-white/25 sm:right-6 sm:top-6"
+          >
+            ×
+          </button>
+          <div
+            className="relative h-[85dvh] w-full max-w-6xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <Image
+              src={currentImage.url}
+              alt={currentImage.altText || title}
+              fill
+              sizes="100vw"
+              className="object-contain"
+              priority
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 }
