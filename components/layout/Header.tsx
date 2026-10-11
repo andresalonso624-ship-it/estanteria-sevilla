@@ -25,7 +25,7 @@ interface Collection {
 
 export default function Header() {
   const { open, openCart, closeCart, cartCount } = useCart();
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [catalogOpen, setCatalogOpen] = useState(false);
@@ -141,21 +141,6 @@ export default function Header() {
 
           {/* SELECTOR DE IDIOMA, BUSCADOR Y CARRITO */}
           <div className="flex items-center gap-2 sm:gap-4">
-            <label className="flex items-center">
-              <span className="sr-only">{t("language")}</span>
-              <select
-                aria-label={t("language")}
-                value={language}
-                onChange={(event) =>
-                  setLanguage(event.target.value as "es" | "zh")
-                }
-                className="max-w-[86px] rounded-full border border-gray-200 bg-white px-2 py-2 text-xs font-medium text-[#2C241C] outline-none transition hover:border-[#C6922F] focus-visible:ring-2 focus-visible:ring-[#C6922F] sm:max-w-none sm:px-3 sm:text-sm"
-              >
-                <option value="es">🇪🇸 ES</option>
-                <option value="zh">🇨🇳 中文</option>
-              </select>
-            </label>
-
             <ProductSearch />
 
             <button
