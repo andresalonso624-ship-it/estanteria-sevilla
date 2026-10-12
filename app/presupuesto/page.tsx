@@ -26,7 +26,7 @@ export default function PresupuestoPage() {
 *Mensaje:*
 ${mensaje}`;
 
-    const numeroWhatsApp = "34651000000";
+    const numeroWhatsApp = "34688097157";
 
     const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
 

@@ -26,12 +26,12 @@ export const metadata: Metadata = {
 
   title: {
     default:
-      "Estanterías para Tiendas y Comercios en Sevilla | Estantería Sevilla",
+      "Estanterías comerciales para tiendas en Sevilla",
     template: "%s | Estantería Sevilla",
   },
 
   description:
-    "Estanterías comerciales, equipamiento para tiendas y mobiliario para negocios en Sevilla. Soluciones profesionales para comercios, supermercados, almacenes y todo tipo de negocios.",
+    "Estanterías comerciales y mobiliario para tiendas en Sevilla. Equipamiento profesional y soluciones a medida para tu negocio.",
 
   keywords: [
     "estanterías para tiendas",
@@ -72,17 +72,17 @@ export const metadata: Metadata = {
     url: "https://www.estanteriasevilla.com",
     siteName: "Estantería Sevilla",
     title:
-      "Estanterías para Tiendas y Comercios en Sevilla | Estantería Sevilla",
+      "Estanterías comerciales para tiendas en Sevilla",
     description:
-      "Estanterías comerciales, equipamiento para tiendas y mobiliario para negocios en Sevilla.",
+      "Estanterías comerciales y mobiliario para tiendas en Sevilla. Equipamiento profesional para tu negocio.",
   },
 
   twitter: {
     card: "summary_large_image",
     title:
-      "Estanterías para Tiendas y Comercios en Sevilla | Estantería Sevilla",
+      "Estanterías comerciales para tiendas en Sevilla",
     description:
-      "Estanterías comerciales y equipamiento profesional para tiendas y negocios.",
+      "Estanterías comerciales y mobiliario para tiendas en Sevilla.",
   },
 
   alternates: {
